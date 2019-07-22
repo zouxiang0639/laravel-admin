@@ -1,8 +1,5 @@
 @extends('admin::layouts.master')
 
-@section('style')
-    <link rel="stylesheet" href="{{  assets_path("/lib/bootstrap3-editable/css/bootstrap-editable.css") }}">
-@stop
 
 @section('content-header')
     <h1>
@@ -55,15 +52,15 @@
                         <td>
                             <div class="btn-group">
                                 @if(!empty($item->route))
-                                <a class="btn btn-default"  href="{!! route($item->route, ['id' => $item->id]) !!}">
+                                <a class="btn btn-default"  href="{!! route($item->route, ['cid' => $item->id]) !!}">
                                     列表
                                 </a>
                                 @endif
                                 <a class="btn btn-default"  href="{!! route('m.client.page.edit', ['id' => $item->id]) !!}">
                                     编辑
                                 </a>
-                                <a class="btn btn-default"  href="javascript:void(0);" data-url="{!! route('m.client.page.destroy', ['id' => $item->id]) !!}" class="item-delete">
-                                    详情
+                                <a class="btn btn-default item-delete"  href="javascript:void(0);" data-url="{!! route('m.client.page.destroy', ['id' => $item->id]) !!}" >
+                                    删除
                                 </a>
                             </div>
                         </td>
@@ -80,24 +77,3 @@
 
 @stop
 
-@section('script')
-    <script src="{{  assets_path("/lib/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
-    <script>
-        $(function(){
-            $('.hot').editable({
-                url: "{!! route('m.other.advert.hot') !!}",
-                type: 'text',
-                params: {
-                    "_method": "PUT",
-                    "_token": $('meta[name="csrf-token"]').attr('content')
-                },
-                pk: $(this).attr('data-pk'),//唯一标示值
-                title: '修改',
-                name: 'hot',
-                success: function(value) {
-                    $(this).text(value);
-                }
-            });
-        })
-    </script>
-@stop

@@ -89,9 +89,11 @@ Route::group([
             Route::get('edit/{id}', ['uses' => "Client\\NewsController@edit", 'as' => 'm.client.news.edit']);
             Route::post('update/{id}', ['uses' => "Client\\NewsController@update", 'as' => 'm.client.news.update']);
             Route::delete('destroy/{id}', ['uses' => "Client\\NewsController@destroy", 'as' => 'm.client.news.destroy']);
+            Route::put('status/{id}', ['uses' => "Client\\NewsController@status", 'as' => 'm.client.news.status']);
         });
 
     });
+
     //其他管理
     Route::group(['prefix'=>'other'], function(){
 
