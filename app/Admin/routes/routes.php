@@ -58,6 +58,40 @@ Route::group([
 
     });
 
+    //客户端管理
+    Route::group(['prefix'=>'client'], function(){
+
+        //导航
+        Route::group(['prefix'=>'nav', 'middleware' => 'admin.auth:m_client_nav'], function(){
+            Route::get('', ['uses' => "Client\\NavController@index", 'as' => 'm.client.nav.list']);
+            Route::post('store', ['uses' => "Client\\NavController@store", 'as' => 'm.nav.store']);
+            Route::get('edit/{id}', ['uses' => "Client\\NavController@edit", 'as' => 'm.nav.edit']);
+            Route::post('update/{id}', ['uses' => "Client\\NavController@update", 'as' => 'm.nav.update']);
+            Route::post('sort', ['uses' => "Client\\NavController@sort", 'as' => 'm.nav.sort']);
+            Route::delete('destroy/{id}', ['uses' => "Client\\NavController@destroy", 'as' => 'm.nav.destroy']);
+        });
+
+        //页面
+        Route::group(['prefix'=>'page', 'middleware' => 'admin.auth:m_client_page'], function(){
+            Route::get('', ['uses' => "Client\\PageController@index", 'as' => 'm.client.page.list']);
+            Route::get('create', ['uses' => "Client\\PageController@create", 'as' => 'm.client.page.create']);
+            Route::post('store', ['uses' => "Client\\PageController@store", 'as' => 'm.client.page.store']);
+            Route::get('edit/{id}', ['uses' => "Client\\PageController@edit", 'as' => 'm.client.page.edit']);
+            Route::post('update/{id}', ['uses' => "Client\\PageController@update", 'as' => 'm.client.page.update']);
+            Route::delete('destroy/{id}', ['uses' => "Client\\PageController@destroy", 'as' => 'm.client.page.destroy']);
+        });
+
+        //信息列表
+        Route::group(['prefix'=>'news', 'middleware' => 'admin.auth:m_client_news'], function(){
+            Route::get('', ['uses' => "Client\\NewsController@index", 'as' => 'm.client.news.list']);
+            Route::get('create', ['uses' => "Client\\NewsController@create", 'as' => 'm.client.news.create']);
+            Route::post('store', ['uses' => "Client\\NewsController@store", 'as' => 'm.client.news.store']);
+            Route::get('edit/{id}', ['uses' => "Client\\NewsController@edit", 'as' => 'm.client.news.edit']);
+            Route::post('update/{id}', ['uses' => "Client\\NewsController@update", 'as' => 'm.client.news.update']);
+            Route::delete('destroy/{id}', ['uses' => "Client\\NewsController@destroy", 'as' => 'm.client.news.destroy']);
+        });
+
+    });
     //其他管理
     Route::group(['prefix'=>'other'], function(){
 

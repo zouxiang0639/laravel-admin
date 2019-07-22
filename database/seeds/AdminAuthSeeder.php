@@ -58,6 +58,7 @@ class AdminAuthSeeder extends Seeder
         $this->admin(); //后台管理
         $this->other(); //其它管理
         $this->system(); //系统管理
+        $this->client(); //系统管理
     }
 
     /**
@@ -119,6 +120,7 @@ class AdminAuthSeeder extends Seeder
     }
 
 
+
     /**
      *  其他管理
      */
@@ -154,6 +156,44 @@ class AdminAuthSeeder extends Seeder
             'permissions' => WhetherConst::YES
         ]);
         MenuBls::storeMenu($menuRequest);
+    }
+
+    /**
+     * 客户端管理
+     */
+    public function client()
+    {
+        $menuRequest = new MenuRequest();
+        $menuRequest->merge([
+            'parent_id' => 0,
+            'title' => '客户端管理',
+            'icon' => 'fa-desktop',
+            'route' => '',
+            'slug' => 'm_client',
+            'permissions' => WhetherConst::YES
+        ]);
+        $menu = MenuBls::storeMenu($menuRequest);
+
+        $menuRequest->merge([
+            'parent_id' => $menu->getKey(),
+            'title' => '导航设置',
+            'icon' => 'fa-align-justify',
+            'route' => 'm.client.nav.list',
+            'slug' => 'm_client_nav',
+            'permissions' => WhetherConst::YES
+        ]);
+        MenuBls::storeMenu($menuRequest);
+
+        $menuRequest->merge([
+            'parent_id' => $menu->getKey(),
+            'title' => '页面',
+            'icon' => 'fa-tags',
+            'route' => 'm.client.page.list',
+            'slug' => 'm_client_page',
+            'permissions' => WhetherConst::YES
+        ]);
+        MenuBls::storeMenu($menuRequest);
+
     }
 
     /**
@@ -213,4 +253,7 @@ class AdminAuthSeeder extends Seeder
         MenuBls::storeMenu($menuRequest);
 
     }
+
+
+
 }
