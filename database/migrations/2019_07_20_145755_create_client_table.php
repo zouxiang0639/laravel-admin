@@ -16,13 +16,14 @@ class CreateClientTable extends Migration
         Schema::create('admin_nav', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent_id')->default(0)->comment('父级ID');
-            $table->integer('template_id')->comment('模版id');
-            $table->tinyInteger('is_template')->comment('是否使用模版 WhetherConst');
+            $table->tinyInteger('bind_type')->comment('绑定类型 NavBindTypeConst');
+            $table->tinyInteger('category')->comment('类别 NavCategoryConst');
+            $table->integer('page_id')->comment('绑定页面');
+            $table->integer('url')->comment('网站地址');
             $table->integer('order')->default(0)->comment('排序');
             $table->string('title', 255)->comment('标题');
+            $table->string('alias', 255)->comment('别名');
             $table->tinyInteger('type')->comment('类型 NavTypeConst');
-
-            $table->string('url', 255)->default('')->comment('网站地址');
             $table->timestamps();
         });
         \DB::statement("ALTER TABLE `admin_nav` comment '客户端导航'");

@@ -291,6 +291,23 @@ SCRIPT;
         return $this;
     }
 
+
+    /**
+     * 格式化数据
+     * @param Closure $callback
+     * @return $this
+     */
+    public function formatDate(\Closure $callback)
+    {
+        foreach($this->data as $key => $value) {
+            if ($callback instanceof \Closure) {
+                $this->data[$key] = call_user_func($callback, $value);
+            }
+        }
+        return $this;
+    }
+
+
     public function toArray()
     {
         $this->data = $this->data->toArray();

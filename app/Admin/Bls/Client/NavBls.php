@@ -2,12 +2,10 @@
 
 namespace App\Admin\Bls\Client;
 
-use App\Admin\Bls\Auth\Model\MenuModel;
-use App\Admin\Bls\Auth\Model\PermissionModel;
 use App\Admin\Bls\Auth\Requests\MenuRequest;
 use App\Admin\Bls\Client\Model\NavModel;
-use App\Consts\Common\WhetherConst;
-use App\Exceptions\LogicException;
+use App\Admin\Bls\Client\Requests\NavRequests;
+use App\Consts\Admin\Client\NavBindTypeConst;
 use App\Library\Admin\Widgets\Tree;
 use Admin;
 
@@ -24,34 +22,39 @@ class NavBls
     /**
      * @return Tree
      */
-    public static function treeView()
+    public static function treeView($request)
     {
 
-        return Admin::tree(new NavModel(), function (Tree $tree) {
-            $tree->setDate(function(NavModel $query){
-                return $query->orderBy('order', 'asc');
-            })->toArray()->setItems();
+        return Admin::tree(new NavModel(), function (Tree $tree) use ($request) {
+            $tree->setDate(function(NavModel $query) use ($request) {
+                return $query->where('category',$request->category)->orderBy('order', 'asc');
+            })->toArray();
+
+            $tree->formatDate(function($item){
+                $item['route'] = '';
+                if($item['bind_type'] == NavBindTypeConst::BIND_PAGE) {
+                    $page = PageBls::find($item['page_id']);
+                    if(!is_null($page)) {
+                        if(empty($item['title'])) {
+                            $item['title'] = $page->title;
+                        }
+                        $item['route'] =  PageBls::getSubsetRoute($page->template);
+                    }
+                }
+                return $item;
+            })->setItems();
 
             $tree->setView([
-                'tree'   => 'admin::auth.menu.tree.menu',
-                'branch' => 'admin::auth.menu.tree.menu_branch',
+                'tree'   => 'admin::client.nav.tree.menu',
+                'branch' => 'admin::client.nav.tree.menu_branch',
             ]);
-            $tree->path = route('m.menu.sort');
+            $tree->path = route('m.client.nav.sort');
 
             $tree->disableCreate();
 
             $tree->branch(function ($branch) {
-                $payload = "<i class='fa {$branch['icon']}'></i>&nbsp;<strong>{$branch['title']}</strong>";
 
-                if (!isset($branch['children'])) {
-                    if (url()->isValidUrl($branch['url'])) {
-                        $url = $branch['url'];
-                    } else {
-                        $url = $branch['url'];
-                    }
-
-                    $payload .= "&nbsp;&nbsp;&nbsp;<a href=\"$url\" class=\"dd-nodrag\">$url</a>";
-                }
+                $payload = "&nbsp;<strong>{$branch['title']}</strong>";
 
                 return $payload;
             });
@@ -60,62 +63,35 @@ class NavBls
 
     /**
      * 存储菜单数据
-     * @param MenuRequest $request
+     * @param NavRequests $request
      * @return mixed
      */
-    public static function storeMenu(MenuRequest $request)
+    public static function store(NavRequests $request)
     {
-        return MenuModel::query()->getQuery()->getConnection()->transaction(function () use($request) {
-
-            //开启同时创建权限
-            if($request->permissions == WhetherConst::YES) {
-
-                //如果权限标签已存在输出错误信息
-                $count = PermissionModel::where('slug', $request->slug)->count();
-                if($count > 0) {
-                    throw new LogicException(1010002, '权限标识已存在');
-                }
-
-                $permissions = new PermissionModel();
-                $permissions->name = $request->title;
-                $permissions->slug = $request->slug;
-                $permissions->save();
-            }
-
-                $model = new MenuModel();
-                $model->parent_id = $request->parent_id;
-                $model->title = $request->title;
-                $model->icon = $request->icon;
-                $model->slug = $request->slug;
-                if($request->route) {
-                    $model->route = $request->route;
-                    $model->url = \Route::has($request->route) ? route($request->route, [], false) : $model->route;
-                }
-
-            if($model->save()){
-                return $model;
-            }
-            return false;
-        });
-
+        $model = new NavModel();
+        $model->parent_id = $request->parent_id;
+        $model->title = $request->title ?: '';
+        $model->bind_type = $request->bind_type;
+        $model->category = $request->category;
+        $model->page_id = $request->page_id  ?: '';
+        $model->url = $request->url ?: '';
+        return $model->save();
     }
 
     /**
      * 更新菜单数据
-     * @param MenuRequest $request
-     * @param MenuModel $model
+     * @param NavRequests $request
+     * @param NavModel $model
      * @return mixed
      */
-    public static function updateMenu(MenuRequest $request, MenuModel $model)
+    public static function update(NavRequests $request, NavModel $model)
     {
         $model->parent_id = $request->parent_id;
-        $model->title = $request->title;
-        $model->icon = $request->icon;
-        $model->slug = $request->slug;
-        if($request->route) {
-            $model->route = $request->route;
-            $model->url = \Route::has($request->route) ? route($request->route, [], false) :  $model->route;
-        }
+        $model->title = $request->title ?: '';
+        $model->bind_type = $request->bind_type;
+        $model->page_id = $request->page_id  ?: '';
+        $model->url = $request->url ?: '';
+
         return $model->save();
     }
 
@@ -129,7 +105,7 @@ class NavBls
 
         $array =  Admin::tree(new NavModel(), function (Tree $tree) use($type) {
             $tree->setDate(function (NavModel $query) use($type) {
-                return $query->where('type', $type)->orderBy('order', 'asc');
+                return $query->where('category', $type)->orderBy('order', 'asc');
             })->toArray()->setItems(Tree::BUILD_SELECT_OPTIONS);
         })->getItems();
         return collect($array)->prepend('/', 0)->all();
@@ -142,7 +118,7 @@ class NavBls
      */
     public static function find($id)
     {
-        return MenuModel::find($id);
+        return NavModel::find($id);
 
     }
 
@@ -189,11 +165,16 @@ class NavBls
     public static function menuTree()
     {
 
-       return Admin::tree(new MenuModel(), function (Tree $tree) {
-            $tree->setDate(function (MenuModel $query) {
+       return Admin::tree(new NavModel(), function (Tree $tree) {
+            $tree->setDate(function (NavModel $query) {
                 return $query->orderBy('order', 'asc');
             })->toArray()->setItems();
         })->getItems();
+    }
+
+    public static function checkNav($pageId)
+    {
+        return NavModel::where('page_id', $pageId)->count();
     }
 
 }

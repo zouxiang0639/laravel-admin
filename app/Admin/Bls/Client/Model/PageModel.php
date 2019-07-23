@@ -2,6 +2,7 @@
 
 namespace App\Admin\Bls\Client\Model;
 
+use App\Admin\Bls\Client\NavBls;
 use App\Library\Database\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 

@@ -64,11 +64,11 @@ Route::group([
         //导航
         Route::group(['prefix'=>'nav', 'middleware' => 'admin.auth:m_client_nav'], function(){
             Route::get('', ['uses' => "Client\\NavController@index", 'as' => 'm.client.nav.list']);
-            Route::post('store', ['uses' => "Client\\NavController@store", 'as' => 'm.nav.store']);
-            Route::get('edit/{id}', ['uses' => "Client\\NavController@edit", 'as' => 'm.nav.edit']);
-            Route::post('update/{id}', ['uses' => "Client\\NavController@update", 'as' => 'm.nav.update']);
-            Route::post('sort', ['uses' => "Client\\NavController@sort", 'as' => 'm.nav.sort']);
-            Route::delete('destroy/{id}', ['uses' => "Client\\NavController@destroy", 'as' => 'm.nav.destroy']);
+            Route::post('store', ['uses' => "Client\\NavController@store", 'as' => 'm.client.nav.store']);
+            Route::get('edit/{id}', ['uses' => "Client\\NavController@edit", 'as' => 'm.client.nav.edit']);
+            Route::post('update/{id}', ['uses' => "Client\\NavController@update", 'as' => 'm.client.nav.update']);
+            Route::post('sort', ['uses' => "Client\\NavController@sort", 'as' => 'm.client.nav.sort']);
+            Route::delete('destroy/{id}', ['uses' => "Client\\NavController@destroy", 'as' => 'm.client.nav.destroy']);
         });
 
         //页面

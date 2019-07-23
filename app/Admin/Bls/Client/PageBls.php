@@ -65,5 +65,10 @@ class PageBls
                 return '';
         }
     }
+
+    public static function getPageAll()
+    {
+        return PageModel::all();
+    }
 }
 

@@ -3,6 +3,7 @@
 
 namespace App\Admin\Controllers\Client;
 
+use App\Admin\Bls\Client\NavBls;
 use App\Admin\Bls\Client\PageBls;
 use App\Admin\Bls\Client\Requests\PageRequests;
 use App\Admin\Bls\Other\Requests\AdvertRequests;
@@ -124,10 +125,14 @@ class PageController extends Controller
 
         $this->isEmpty($model);
 
+        if(NavBls::checkNav($id)) {
+            throw new LogicException(1010005, '请先删除导航关联的页面');
+        }
+
         if($model->delete()) {
             return (new JsonResponse())->success('操作成功');
         } else {
-            throw new LogicException(1010001, '操作失败');
+            throw new LogicException(1010002, '操作失败');
         }
     }
 

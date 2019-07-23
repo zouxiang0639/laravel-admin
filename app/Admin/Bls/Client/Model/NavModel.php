@@ -13,4 +13,23 @@ class NavModel extends Model
      */
     protected $table = 'admin_nav';
 
+    /**
+     * Get children of current node.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(static::class, 'parent_id');
+    }
+
+    /**
+     * Get parent of current node.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(static::class, 'parent_id');
+    }
 }

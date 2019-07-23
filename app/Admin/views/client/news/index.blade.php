@@ -13,8 +13,6 @@
         <div class="box-header">
             <div class="pull-left ">
                 <form class="form-inline" name="search" action="">
-
-
                     <div class="input-group input-group-sm ">
                         <input name="title" value="{!! Input::get('title') !!}" class="form-control pull-right" placeholder="标题" type="text">
                         <div class="input-group-btn">
@@ -28,8 +26,10 @@
 
             <div class="pull-right">
                 <a href="{!! route('m.client.page.list', ['template' => $page->template]) !!}" class="btn btn-sm btn-default">
-                    <i class="fa fa-list"></i>&nbsp;返回
+                    <i class="fa fa-list"></i>&nbsp;列表
                 </a>
+                <a href="JavaScript:history.go(-1)" class="btn btn-sm btn-default"><i class="fa fa-arrow-left"></i>&nbsp;返回</a>
+
                 <a href="{!! route('m.client.news.create', ['cid' => Input::get('cid')]) !!}" class="btn btn-sm btn-success">
                     <i class="fa fa-save"></i>&nbsp;&nbsp;新增
                 </a>
