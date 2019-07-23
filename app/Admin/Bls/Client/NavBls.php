@@ -106,8 +106,22 @@ class NavBls
         $array =  Admin::tree(new NavModel(), function (Tree $tree) use($type) {
             $tree->setDate(function (NavModel $query) use($type) {
                 return $query->where('category', $type)->orderBy('order', 'asc');
-            })->toArray()->setItems(Tree::BUILD_SELECT_OPTIONS);
+            })->toArray();
+            $tree->formatDate(function($item){
+                $item['route'] = '';
+                if($item['bind_type'] == NavBindTypeConst::BIND_PAGE) {
+                    $page = PageBls::find($item['page_id']);
+                    if(!is_null($page)) {
+                        if(empty($item['title'])) {
+                            $item['title'] = $page->title;
+                        }
+                        $item['route'] =  PageBls::getSubsetRoute($page->template);
+                    }
+                }
+                return $item;
+            })->setItems(Tree::BUILD_SELECT_OPTIONS);
         })->getItems();
+
         return collect($array)->prepend('/', 0)->all();
     }
 
@@ -168,7 +182,22 @@ class NavBls
        return Admin::tree(new NavModel(), function (Tree $tree) {
             $tree->setDate(function (NavModel $query) {
                 return $query->orderBy('order', 'asc');
-            })->toArray()->setItems();
+            })->toArray();
+
+           $tree->formatDate(function($item){
+               $item['route'] = '';
+               if($item['bind_type'] == NavBindTypeConst::BIND_PAGE) {
+                   $page = PageBls::find($item['page_id']);
+                   if(!is_null($page)) {
+                       if(empty($item['title'])) {
+                           $item['title'] = $page->title;
+                       }
+                       $item['route'] =  PageBls::getSubsetRoute($page->template);
+                   }
+               }
+               return $item;
+           })->setItems();
+
         })->getItems();
     }
 
