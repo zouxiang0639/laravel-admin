@@ -15,7 +15,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
 
-       // View::composer('admin::users.form', 'App\Http\Composers\UserFormComposer');
+       // View::composer('admin::users.form', 'App\Http\Composers\Admin\HeaderComposer');
 
     }
 
