@@ -163,6 +163,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        App\Http\Composers\ComposerServiceProvider::class, //注册前端公共页面
 
         /*
          * Package Service Providers...
