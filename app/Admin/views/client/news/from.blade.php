@@ -70,6 +70,16 @@
         </div>
         <div class="form-group">
             <label for="username" class="col-sm-2 control-label">
+                浏览量:
+            </label>
+            <div class="col-sm-7 pageview">
+                <div class="input-group" style="width:100%">
+                    {!!  Form::number('pageview', isset($info) ? $info->pageview : 0, ['class' => 'form-control']) !!}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="username" class="col-sm-2 control-label">
                 <span class="text-danger">*</span>
                 SEO关键字:
             </label>

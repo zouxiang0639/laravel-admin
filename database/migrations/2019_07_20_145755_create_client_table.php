@@ -23,7 +23,6 @@ class CreateClientTable extends Migration
             $table->integer('order')->default(0)->comment('排序');
             $table->string('title', 255)->comment('标题');
             $table->string('alias', 255)->comment('别名');
-            $table->tinyInteger('type')->comment('类型 NavTypeConst');
             $table->timestamps();
         });
         \DB::statement("ALTER TABLE `admin_nav` comment '客户端导航'");
@@ -48,6 +47,7 @@ class CreateClientTable extends Migration
             $table->increments('id');
             $table->string('title', 255)->default('')->comment('标题');
             $table->integer('page_id')->default(0)->comment('页面ID');
+            $table->integer('pageview')->default(0)->comment('浏览量');
             $table->text('picture')->string('comment', 255)->default('')->comment('缩率图');
             $table->string('comment', 255)->default('')->comment('描述');
             $table->text('contents')->nullable()->comment('内容');
