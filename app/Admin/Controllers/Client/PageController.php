@@ -35,7 +35,7 @@ class PageController extends Controller
 
         $list->getCollection()->each(function($item) {
             $item->templateName = PageTemplateConst::getDesc($item->template);
-            $item->route = PageBls::getSubsetRoute($item->template);
+            $item->route = PageTemplateConst::getAdminRoute($item->template);
         });
 
         return View::make('admin::client.page.index',[

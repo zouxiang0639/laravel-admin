@@ -56,16 +56,6 @@ class PageBls
 
     }
 
-    public static function getSubsetRoute($template)
-    {
-        switch($template) {
-            case PageTemplateConst::INFO:
-                return 'm.client.news.list';
-            default :
-                return '';
-        }
-    }
-
     public static function getPageAll()
     {
         return PageModel::all();

@@ -14,15 +14,17 @@ class NavRequests extends JsonResponseValidator
 
         return [
             'page_id' => 'required_if:bind_type,'. NavBindTypeConst::BIND_PAGE,
-            'url' => 'required_if:url,'. NavBindTypeConst::BIND_URL,
+            'url' => 'required_if:bind_type,'. NavBindTypeConst::BIND_URL,
+            'title' => 'required_if:bind_type,' . NavBindTypeConst::JUMP . ','. NavBindTypeConst::BIND_URL,
         ];
     }
 
     public function messages()
     {
         return [
-            'page_id.required' => '页面不能为空',
-            'url.required' => 'URL不能为空',
+            'page_id.required_if' => '页面不能为空',
+            'url.required_if' => 'URL不能为空',
+            'title.required_if' => '标题不能为空',
         ];
     }
 

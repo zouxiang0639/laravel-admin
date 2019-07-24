@@ -23,7 +23,7 @@ use View;
  */
 class NewsController extends Controller
 {
-    public $template = PageTemplateConst::INFO;
+    public $template = PageTemplateConst::NEWS;
     public $page = '';
 
     public function __construct(Request $request)

@@ -19,7 +19,7 @@ class CreateClientTable extends Migration
             $table->tinyInteger('bind_type')->comment('绑定类型 NavBindTypeConst');
             $table->tinyInteger('category')->comment('类别 NavCategoryConst');
             $table->integer('page_id')->comment('绑定页面');
-            $table->integer('url')->comment('网站地址');
+            $table->string('url', 255)->comment('网站地址');
             $table->integer('order')->default(0)->comment('排序');
             $table->string('title', 255)->comment('标题');
             $table->string('alias', 255)->comment('别名');

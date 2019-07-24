@@ -2,10 +2,10 @@
 
 namespace App\Admin\Bls\Client;
 
-use App\Admin\Bls\Auth\Requests\MenuRequest;
 use App\Admin\Bls\Client\Model\NavModel;
 use App\Admin\Bls\Client\Requests\NavRequests;
 use App\Consts\Admin\Client\NavBindTypeConst;
+use App\Consts\Admin\Client\PageTemplateConst;
 use App\Library\Admin\Widgets\Tree;
 use Admin;
 
@@ -24,7 +24,6 @@ class NavBls
      */
     public static function treeView($request)
     {
-
         return Admin::tree(new NavModel(), function (Tree $tree) use ($request) {
             $tree->setDate(function(NavModel $query) use ($request) {
                 return $query->where('category',$request->category)->orderBy('order', 'asc');
@@ -38,7 +37,7 @@ class NavBls
                         if(empty($item['title'])) {
                             $item['title'] = $page->title;
                         }
-                        $item['route'] =  PageBls::getSubsetRoute($page->template);
+                        $item['route'] =  PageTemplateConst::getAdminRoute($page->template);
                     }
                 }
                 return $item;
@@ -115,7 +114,7 @@ class NavBls
                         if(empty($item['title'])) {
                             $item['title'] = $page->title;
                         }
-                        $item['route'] =  PageBls::getSubsetRoute($page->template);
+                        $item['route'] =  PageTemplateConst::getAdminRoute($page->template);
                     }
                 }
                 return $item;
@@ -176,25 +175,46 @@ class NavBls
      * 获取menu树数据
      * @return mixed
      */
-    public static function menuTree()
+    public static function menuTree($category)
     {
 
-       return Admin::tree(new NavModel(), function (Tree $tree) {
-            $tree->setDate(function (NavModel $query) {
-                return $query->orderBy('order', 'asc');
+       return Admin::tree(new NavModel(), function (Tree $tree) use ($category) {
+            $tree->setDate(function (NavModel $query) use ($category) {
+                return $query->where('category', $category)->orderBy('order', 'asc');
             })->toArray();
 
            $tree->formatDate(function($item){
                $item['route'] = '';
+
                if($item['bind_type'] == NavBindTypeConst::BIND_PAGE) {
                    $page = PageBls::find($item['page_id']);
                    if(!is_null($page)) {
                        if(empty($item['title'])) {
                            $item['title'] = $page->title;
                        }
-                       $item['route'] =  PageBls::getSubsetRoute($page->template);
+                       $item['route'] =  PageTemplateConst::getWebRoute($page->template);
+                       $item['url'] = route( $item['route'],['id' => $item['id']]);
+
+                   }
+               } elseif( $item['bind_type'] == NavBindTypeConst::JUMP ) {
+                   $item['url'] = '';
+
+                   $page = PageBls::find($item['page_id']);
+                   $nav = NavModel::where('parent_id',$item['id'])->orderBy('order', 'asc')->first();
+                   if(!is_null($page)) {
+                       if(empty($item['title'])) {
+                           $item['title'] = $page->title;
+                       }
+                   }
+
+                   if(!is_null($nav) && !is_null($nav->page)) {
+
+                       $item['jump_id'] = $nav->id;
+                       $item['route'] =  PageTemplateConst::getWebRoute($nav->page->template);
+                       $item['url'] = route( $item['route'],['id' => $item['jump_id']]);
                    }
                }
+
                return $item;
            })->setItems();
 

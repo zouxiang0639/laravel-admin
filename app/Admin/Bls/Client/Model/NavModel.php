@@ -32,4 +32,14 @@ class NavModel extends Model
     {
         return $this->belongsTo(static::class, 'parent_id');
     }
+
+    /**
+     * Get parent of current node.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function page()
+    {
+        return $this->belongsTo(PageModel::class, 'page_id');
+    }
 }

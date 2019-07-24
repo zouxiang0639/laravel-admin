@@ -40,6 +40,7 @@ use App\Consts\Admin\Client\NavBindTypeConst;
         };
         var param = {
             "bindPage":"{!! NavBindTypeConst::BIND_PAGE !!}", //绑定页面
+            "bindUrl":"{!! NavBindTypeConst::BIND_URL !!}", //绑定Url
         };
 
         $(function(){
@@ -48,9 +49,12 @@ use App\Consts\Admin\Client\NavBindTypeConst;
                 if(key == param.bindPage) {
                     $('#page_html').show();
                     $('#url_html').hide();
-                } else {
+                } else if(key == param.bindUrl) {
                     $('#page_html').hide();
                     $('#url_html').show();
+                } else {
+                    $('#page_html').hide();
+                    $('#url_html').hide();
                 }
             }).trigger('change');
         })
