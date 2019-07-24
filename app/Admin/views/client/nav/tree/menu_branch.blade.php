@@ -2,7 +2,7 @@
     <div class="dd-handle">
         {!! $branchCallback($branch) !!}
         <span class="pull-right dd-nodrag">
-            @if($branch['bind_type'] != \App\Consts\Admin\Client\NavBindTypeConst::JUMP)
+            @if($branch['bind_type'] == \App\Consts\Admin\Client\NavBindTypeConst::BIND_PAGE)
                  <a href="{!! route('m.client.nav.edit', ['id' => $branch[$keyName]]) !!}"><i class="fa fa-edit" style="color: #F56954"></i></a>
                 @if(!empty($branch['route']))
                     <a href="{!! route($branch['route'], ['cid' => $branch['page_id']]) !!}"><i style="color: #F56954" class="fa fa-align-justify"></i></a>
