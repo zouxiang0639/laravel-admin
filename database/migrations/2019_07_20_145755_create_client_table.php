@@ -69,10 +69,10 @@ class CreateClientTable extends Migration
 
         Schema::create('admin_fragment', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title', 255)->comment('标题');
-            $table->string('url', 255)->comment('链接');
-            $table->string('picture', 255)->comment('缩率图');
-            $table->string('comment', 255)->comment('简介');
+            $table->string('title', 255)->default('')->comment('标题');
+            $table->string('url', 255)->default('')->comment('链接');
+            $table->string('picture', 255)->default('')->comment('缩率图');
+            $table->string('comment', 255)->default('')->comment('简介');
             $table->text('contents')->nullable()->comment('内容');
             $table->timestamps();
         });
@@ -90,5 +90,6 @@ class CreateClientTable extends Migration
         Schema::dropIfExists('admin_page');
         Schema::dropIfExists('admin_news');
         Schema::dropIfExists('admin_search');
+        Schema::dropIfExists('admin_fragment');
     }
 }
