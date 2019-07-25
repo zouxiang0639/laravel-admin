@@ -30,7 +30,25 @@ class NewsBls
             $model->where('page_id', $request->cid);
         }
 
-        return $model->orderByRaw($order)->paginate($limit);
+        return $model->orderBy('order','desc')->orderByRaw($order)->paginate($limit);
+    }
+
+
+    /**
+     * @param Request $request
+     * @param string $order
+     * @param int $limit
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public static function getListByClient($data, $order = '`id` DESC', $limit = 20)
+    {
+        $model = NewsModel::query();
+
+        if(!empty($data['cid'])) {
+            $model->where('page_id', $data['cid']);
+        }
+
+        return $model->orderBy('order','desc')->orderByRaw($order)->paginate($limit);
     }
 
     public static function store(NewsRequests $request)
@@ -72,12 +90,12 @@ class NewsBls
     public static function getLast($id, $pageId)
     {
 
-        return NewsModel::where('page_id', $pageId)->where('id', '>' ,$id)->orderBy('id', 'asc')->first();
+        return NewsModel::where('page_id', $pageId)->where('id', '>' ,$id)->orderBy('order','desc')->orderBy('id', 'asc')->first();
     }
 
     public static function getNext($id, $pageId)
     {
-        return NewsModel::where('page_id', $pageId)->where('id', '<' ,$id)->orderBy('id', 'desc')->first();
+        return NewsModel::where('page_id', $pageId)->where('id', '<' ,$id)->orderBy('order','desc')->orderBy('id', 'desc')->first();
     }
 }
 
