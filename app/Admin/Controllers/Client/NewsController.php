@@ -23,14 +23,14 @@ use View;
  */
 class NewsController extends Controller
 {
-    public $template = PageTemplateConst::NEWS;
+    public $template = [PageTemplateConst::NEWS];
     public $page = '';
 
     public function __construct(Request $request)
     {
         $page = PageBls::find($request->cid);
 
-        if(is_null($page) || $page->template != $this->template) {
+        if(is_null($page) || !in_array($page->template, $this->template)) {
             throw new LogicException(1010003, '数据查询失败');
         }
         $this->page = $page;

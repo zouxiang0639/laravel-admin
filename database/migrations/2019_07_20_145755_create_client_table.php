@@ -42,7 +42,6 @@ class CreateClientTable extends Migration
         });
         \DB::statement("ALTER TABLE `admin_page` comment '客户端页面'");
 
-
         Schema::create('admin_news', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 255)->default('')->comment('标题');
@@ -60,7 +59,13 @@ class CreateClientTable extends Migration
         });
         \DB::statement("ALTER TABLE `admin_news` comment '客户端信息列表详情'");
 
-
+        Schema::create('admin_search', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title', 255)->comment('标题');
+            $table->string('url', 255)->comment('标题');
+            $table->timestamps();
+        });
+        \DB::statement("ALTER TABLE `admin_search` comment '全文搜索'");
     }
 
     /**
@@ -73,5 +78,6 @@ class CreateClientTable extends Migration
         Schema::dropIfExists('admin_nav');
         Schema::dropIfExists('admin_page');
         Schema::dropIfExists('admin_news');
+        Schema::dropIfExists('admin_search');
     }
 }
