@@ -1,4 +1,5 @@
 {!! Form::open(['class' => 'form-horizontal box-body fields-group']) !!}
+<input type="hidden" name="page_id" value="{{ Input::get('cid') }}">
 <div class="box-header">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab" aria-expanded="false">基本信息</a></li>

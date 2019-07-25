@@ -96,6 +96,8 @@ class NewsController extends Controller
     {
         $model = NewsBls::find($id);
 
+        dump(NewsBls::getLast($id,$model->page_id));
+        dump(NewsBls::getNext($id,$model->page_id));
         $this->isEmpty($model);
 
         return View::make('admin::client.news.edit',[

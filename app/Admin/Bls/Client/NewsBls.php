@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 class NewsBls
 {
 
+    /**
+     * @param Request $request
+     * @param string $order
+     * @param int $limit
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public static function getList(Request $request, $order = '`id` DESC', $limit = 20)
     {
         $model = NewsModel::query();
@@ -20,12 +26,17 @@ class NewsBls
             $model->where('title', 'like', '%' . $request->title . '%');
         }
 
+        if(!empty($request->cid)) {
+            $model->where('page_id', $request->cid);
+        }
+
         return $model->orderByRaw($order)->paginate($limit);
     }
 
     public static function store(NewsRequests $request)
     {
         $model = new NewsModel();
+        $model->page_id = $request->page_id;
         $model->title = $request->title;
         $model->picture = $request->picture ?: '';
         $model->comment = $request->comment ?: '';
@@ -50,6 +61,23 @@ class NewsBls
         $model->description = $request->description ?: '';
         return $model->save();
 
+    }
+
+    /**
+     * 获取上一条
+     * @param $id
+     * @param $pageId
+     * @return mixed
+     */
+    public static function getLast($id, $pageId)
+    {
+
+        return NewsModel::where('page_id', $pageId)->where('id', '>' ,$id)->orderBy('id', 'asc')->first();
+    }
+
+    public static function getNext($id, $pageId)
+    {
+        return NewsModel::where('page_id', $pageId)->where('id', '<' ,$id)->orderBy('id', 'desc')->first();
     }
 }
 
