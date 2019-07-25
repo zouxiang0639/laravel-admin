@@ -42,6 +42,7 @@ class CreateOtherTable extends Migration
             $table->string('title', 100)->comment('标题');
             $table->string('links', 200)->default('')->comment('链接');
             $table->string('picture', 200)->default('')->comment('缩率图');
+            $table->string('comment', 255)->default('')->comment('简介');
             $table->text('contents')->default('')->comment('内容');
             $table->tinyInteger('is_lock')->default(2)->comment('状态 1锁住 2解锁 :WhetherConst');
             $table->timestamps();
