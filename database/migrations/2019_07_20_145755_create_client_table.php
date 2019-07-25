@@ -54,6 +54,7 @@ class CreateClientTable extends Migration
             $table->string('keywords', 255)->default('')->comment('关键字');
             $table->string('description', 255)->default('')->comment('描述');
             $table->tinyInteger('status')->comment('状态 1启用 2禁用 :WhetherConst');
+            $table->integer('order')->default(0)->comment('排序');
             $table->timestamp('deleted_at')->default(0);
             $table->timestamps();
         });

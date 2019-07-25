@@ -7,6 +7,10 @@
     </h1>
 @stop
 
+@section('style')
+    <link rel="stylesheet" href="{{  assets_path("/lib/bootstrap3-editable/css/bootstrap-editable.css") }}">
+@stop
+
 @section('content')
 
     <div class="box">
@@ -45,6 +49,7 @@
             <table class="table table-hover">
                 <tr>
                     <th>编号</th>
+                    <th>热度</th>
                     <th>标题</th>
                     <th>创建时间</th>
                     <th>状态</th>
@@ -59,6 +64,9 @@
                     @foreach($list as $item)
                         <tr>
                             <td>{!! $item->id !!}</td>
+                            <td>
+                                <a href="javascript:;" class="hot" data-pk="{!! $item->id !!}">{!! $item->order !!}</a>
+                            </td>
                             <td>{!! $item->title !!}</td>
                             <td>{!! $item->created_at !!}</td>
                             <td class="switch_submit" data-href="{!! route('m.client.news.status', ['id' => $item->id, 'cid' => $page->id]) !!}">
@@ -88,4 +96,28 @@
         <!-- /.box-body -->
     </div>
 
+@stop
+
+
+@section('script')
+    <script src="{{  assets_path("/lib/bootstrap3-editable/js/bootstrap-editable.min.js") }}"></script>
+    <script>
+        $(function(){
+            $('.hot').editable({
+                url: "{!! route('m.client.news.order') !!}",
+                type: 'text',
+                params: {
+                    "_method": "PUT",
+                    "cid": "{!! Input::get('cid') !!}",
+                    "_token": $('meta[name="csrf-token"]').attr('content')
+                },
+                pk: $(this).attr('data-pk'),//唯一标示值
+                title: '修改',
+                name: 'hot',
+                success: function(value) {
+                    $(this).text(value);
+                }
+            });
+        })
+    </script>
 @stop

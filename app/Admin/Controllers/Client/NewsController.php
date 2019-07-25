@@ -96,8 +96,6 @@ class NewsController extends Controller
     {
         $model = NewsBls::find($id);
 
-        dump(NewsBls::getLast($id,$model->page_id));
-        dump(NewsBls::getNext($id,$model->page_id));
         $this->isEmpty($model);
 
         return View::make('admin::client.news.edit',[
@@ -161,6 +159,27 @@ class NewsController extends Controller
         $this->isEmpty($model);
 
         $model->status = $request->status;
+
+        if($model->save()) {
+            return (new JsonResponse())->success('操作成功');
+        } else {
+            throw new LogicException(1010001, '操作失败');
+        }
+
+    }
+
+    /**
+     * 更新排序
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws LogicException
+     */
+    public function order(Request $request)
+    {
+
+        $model = NewsBls::find($request->pk);
+
+        $model->order = intval($request->value);
 
         if($model->save()) {
             return (new JsonResponse())->success('操作成功');

@@ -90,6 +90,7 @@ Route::group([
             Route::post('update/{id}', ['uses' => "Client\\NewsController@update", 'as' => 'm.client.news.update']);
             Route::delete('destroy/{id}', ['uses' => "Client\\NewsController@destroy", 'as' => 'm.client.news.destroy']);
             Route::put('status/{id}', ['uses' => "Client\\NewsController@status", 'as' => 'm.client.news.status']);
+            Route::put('order', ['uses' => "Client\\NewsController@order", 'as' => 'm.client.news.order']);
         });
 
     });
