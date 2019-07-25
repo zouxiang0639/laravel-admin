@@ -62,6 +62,7 @@ class NewsBls
         $model->contents = $request->contents ?: '';
         $model->keywords = $request->keywords ?: '';
         $model->description = $request->description ?: '';
+        $model->status  = WhetherConst::YES;
         return $model->save();
     }
 

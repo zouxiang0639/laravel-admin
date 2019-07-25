@@ -66,6 +66,17 @@ class CreateClientTable extends Migration
             $table->timestamps();
         });
         \DB::statement("ALTER TABLE `admin_search` comment '全文搜索'");
+
+        Schema::create('admin_fragment', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('title', 255)->comment('标题');
+            $table->string('url', 255)->comment('链接');
+            $table->string('picture', 255)->comment('缩率图');
+            $table->string('comment', 255)->comment('简介');
+            $table->text('contents')->nullable()->comment('内容');
+            $table->timestamps();
+        });
+        \DB::statement("ALTER TABLE `admin_fragment` comment '信息碎片表'");
     }
 
     /**
