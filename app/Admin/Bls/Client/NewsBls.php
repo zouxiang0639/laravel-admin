@@ -4,6 +4,7 @@ namespace App\Admin\Bls\Client;
 
 use App\Admin\Bls\Client\Model\NewsModel;
 use App\Admin\Bls\Client\Requests\NewsRequests;
+use App\Consts\Common\WhetherConst;
 use Illuminate\Http\Request;
 
 /**
@@ -48,7 +49,7 @@ class NewsBls
             $model->where('page_id', $data['cid']);
         }
 
-        return $model->orderBy('order','desc')->orderByRaw($order)->paginate($limit);
+        return $model->where('status', WhetherConst::YES)->orderBy('order','desc')->orderByRaw($order)->paginate($limit);
     }
 
     public static function store(NewsRequests $request)
@@ -90,12 +91,12 @@ class NewsBls
     public static function getLast($id, $pageId)
     {
 
-        return NewsModel::where('page_id', $pageId)->where('id', '>' ,$id)->orderBy('order','desc')->orderBy('id', 'asc')->first();
+        return NewsModel::where('page_id', $pageId)->where('status', WhetherConst::YES)->where('id', '>' ,$id)->orderBy('order','desc')->orderBy('id', 'asc')->first();
     }
 
     public static function getNext($id, $pageId)
     {
-        return NewsModel::where('page_id', $pageId)->where('id', '<' ,$id)->orderBy('order','desc')->orderBy('id', 'desc')->first();
+        return NewsModel::where('page_id', $pageId)->where('status', WhetherConst::YES)->where('id', '<' ,$id)->orderBy('order','desc')->orderBy('id', 'desc')->first();
     }
 }
 
