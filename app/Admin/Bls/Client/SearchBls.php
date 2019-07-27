@@ -47,7 +47,7 @@ class SearchBls
                 $route = PageTemplateConst::getWebRoute($item->template);
                 $item->url = route($route, ['id' => $item->business_no]);
                 SearchModel::insert($item->toArray());
-            })->toArray();
+            });
 
 
     }
@@ -65,7 +65,7 @@ class SearchBls
                 unset($item->page_title);
                 unset($item->nav_id);
                 SearchModel::insert($item->toArray());
-            })->toArray();
+            });
 
     }
 }
