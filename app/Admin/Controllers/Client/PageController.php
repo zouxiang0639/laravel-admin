@@ -86,7 +86,6 @@ class PageController extends Controller
     public function edit($id)
     {
         $model = PageBls::find($id);
-
         $this->isEmpty($model);
 
         return View::make('admin::client.page.edit',[

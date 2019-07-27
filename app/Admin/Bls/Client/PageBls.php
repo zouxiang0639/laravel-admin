@@ -60,5 +60,15 @@ class PageBls
     {
         return PageModel::all();
     }
+
+    public static function getPageBySeo(PageModel $model)
+    {
+        $config = config('config');
+        return [
+            'title' => $config['title'] . '-' . $model->title,
+            'keywords' => empty($model->keywords) ? $config['keywords'] : $model->keywords,
+            'description' => empty($model->description) ? $config['description'] : $model->description,
+        ];
+    }
 }
 

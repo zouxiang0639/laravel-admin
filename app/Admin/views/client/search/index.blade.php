@@ -96,7 +96,7 @@
                             locked = true;
                         } else {
                             swal(res.data, '', 'success');
-                            window.location.href = document.location;
+                            window.location.href = '';
                         }
                     },
                     error:function () {

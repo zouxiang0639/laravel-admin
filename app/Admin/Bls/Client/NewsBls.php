@@ -99,5 +99,15 @@ class NewsBls
     {
         return NewsModel::where('page_id', $pageId)->where('status', WhetherConst::YES)->where('id', '<' ,$id)->orderBy('order','desc')->orderBy('id', 'desc')->first();
     }
+
+    public static function getPageBySeo(NewsModel $model)
+    {
+        $config = config('config');
+        return [
+            'title' => $config['title'] . '-' . $model->title,
+            'keywords' => empty($model->keywords) ? $config['keywords'] : $model->keywords,
+            'description' => empty($model->description) ? $config['description'] : $model->description,
+        ];
+    }
 }
 
