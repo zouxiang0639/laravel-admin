@@ -157,15 +157,7 @@ class AdminAuthSeeder extends Seeder
         ]);
         MenuBls::storeMenu($menuRequest);
 
-        $menuRequest->merge([
-            'parent_id' => $menu->getKey(),
-            'title' => '碎片',
-            'icon' => 'fa-bars',
-            'route' => 'm.other.fragment.list',
-            'slug' => 'm_other_fragment',
-            'permissions' => WhetherConst::YES
-        ]);
-        MenuBls::storeMenu($menuRequest);
+
     }
 
     /**
@@ -200,6 +192,25 @@ class AdminAuthSeeder extends Seeder
             'icon' => 'fa-tags',
             'route' => 'm.client.page.list',
             'slug' => 'm_client_page',
+            'permissions' => WhetherConst::YES
+        ]);
+        MenuBls::storeMenu($menuRequest);
+        $menuRequest->merge([
+            'parent_id' => $menu->getKey(),
+            'title' => '碎片',
+            'icon' => 'fa-bars',
+            'route' => 'm.other.fragment.list',
+            'slug' => 'm_other_fragment',
+            'permissions' => WhetherConst::YES
+        ]);
+        MenuBls::storeMenu($menuRequest);
+
+        $menuRequest->merge([
+            'parent_id' => $menu->getKey(),
+            'title' => '搜索系统',
+            'icon' => 'fa-bars',
+            'route' => 'm.client.search.list',
+            'slug' => 'm_client_search',
             'permissions' => WhetherConst::YES
         ]);
         MenuBls::storeMenu($menuRequest);

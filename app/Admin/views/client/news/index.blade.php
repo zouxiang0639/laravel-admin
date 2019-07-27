@@ -57,8 +57,7 @@
                 </tr>
                 @if($list->isEmpty())
                     <tr>
-                        <td colspan="5" style="text-align: center">暂无数据</td>
-
+                        <td colspan="6" style="text-align: center">暂无数据</td>
                     </tr>
                 @else
                     @foreach($list as $item)

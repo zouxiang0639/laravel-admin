@@ -27,6 +27,7 @@ class NavController extends Controller
      */
     public function index(Request $request)
     {
+        dd(NavBls::getNavCrumbs(8));
         if(empty($request->category)) {
             $request->merge([
                 'category' => NavCategoryConst::HEADER
@@ -184,4 +185,6 @@ class NavController extends Controller
 
         })->getFormHtml();
     }
+
+
 }

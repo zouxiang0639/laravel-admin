@@ -62,8 +62,9 @@ class CreateClientTable extends Migration
         Schema::create('admin_search', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title', 255)->comment('标题');
-            $table->string('url', 255)->comment('标题');
-            $table->timestamps();
+            $table->string('url', 255)->comment('url');
+            $table->tinyInteger('template')->default(0)->comment('模版 PageTemplateConst');
+            $table->integer('business_no')->default(0)->comment('业务ID');
         });
         \DB::statement("ALTER TABLE `admin_search` comment '全文搜索'");
     }

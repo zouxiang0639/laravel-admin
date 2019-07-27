@@ -15,10 +15,6 @@ class NewsModel extends Model
      */
     protected $table = 'admin_news';
 
-    protected $casts = [
-        'extend' => 'array'
-    ];
-
     /**
      * The attributes that should be mutated to dates.
      *

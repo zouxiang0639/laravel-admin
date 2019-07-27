@@ -81,6 +81,13 @@ Route::group([
             Route::delete('destroy/{id}', ['uses' => "Client\\PageController@destroy", 'as' => 'm.client.page.destroy']);
         });
 
+        //搜索管理系统
+        Route::group(['prefix'=>'search', 'middleware' => 'admin.auth:m_client_search'], function(){
+            Route::get('', ['uses' => "Client\\SearchController@index", 'as' => 'm.client.search.list']);
+            Route::post('generate', ['uses' => "Client\\SearchController@generate", 'as' => 'm.client.search.generate']);
+
+        });
+
         //信息列表
         Route::group(['prefix'=>'news', 'middleware' => 'admin.auth:m_client_news'], function(){
             Route::get('', ['uses' => "Client\\NewsController@index", 'as' => 'm.client.news.list']);

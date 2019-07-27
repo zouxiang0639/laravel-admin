@@ -8,6 +8,7 @@ use App\Consts\Admin\Client\NavBindTypeConst;
 use App\Consts\Admin\Client\PageTemplateConst;
 use App\Library\Admin\Widgets\Tree;
 use Admin;
+use Illuminate\Support\Collection;
 
 /**
  * Class RoleBls.
@@ -74,7 +75,11 @@ class NavBls
         $model->category = $request->category;
         $model->page_id = $request->page_id  ?: '';
         $model->url = $request->url ?: '';
-        return $model->save();
+
+        if($model->save()){
+            return $model;
+        }
+        return false;
     }
 
     /**
@@ -92,6 +97,20 @@ class NavBls
         $model->url = $request->url ?: '';
 
         return $model->save();
+    }
+
+    public static function getNavCrumbs($navId, $array = [])
+    {
+
+        if($navId == 0) {
+
+            return array_reverse($array);
+        }
+        $model = NavModel::find($navId);
+        static::formatNav(Collection::make([$model]));
+        $array[] = $model;
+
+        return static::getNavCrumbs($model->parent_id, $array);
     }
 
     /**
@@ -224,6 +243,53 @@ class NavBls
     public static function checkNav($pageId)
     {
         return NavModel::where('page_id', $pageId)->count();
+    }
+
+    /**
+     * @param $category
+     * @param $pageId
+     * @return mixed
+     */
+    public static function getNav($pageId, $category)
+    {
+        return NavModel::where('page_id', $pageId)->where('category', $category)->first();
+    }
+
+    public static function formatNav(Collection $item)
+    {
+        $item->each(function($item) {
+            $item->route = '';
+
+            if($item->bind_type == NavBindTypeConst::BIND_PAGE) {
+                $page = PageBls::find($item->page_id);
+                if(!is_null($page)) {
+                    if(empty($item->title)) {
+                        $item->title = $page->title;
+                    }
+                    $item->route =  PageTemplateConst::getWebRoute($page->template);
+                    $item->url = route( $item->route,['id' => $item->id]);
+
+                }
+            } elseif( $item->bind_type == NavBindTypeConst::JUMP ) {
+                $item->url = '';
+
+                $page = PageBls::find($item->page_id);
+                $nav = NavModel::where('parent_id',$item->id)->orderBy('order', 'asc')->first();
+                if(!is_null($page)) {
+                    if(empty($item->title)) {
+                        $item->title = $page->title;
+                    }
+                }
+
+                if(!is_null($nav) && !is_null($nav->page)) {
+                    $item->jump_id = $nav->id;
+                    $item->route =  PageTemplateConst::getWebRoute($nav->page->template);
+                    $item->url = route( $item->route,['id' => $item->jump_id]);
+                }
+            }
+
+        });
+
     }
 
 }
