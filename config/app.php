@@ -164,6 +164,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         App\Http\Composers\ComposerServiceProvider::class, //注册前端公共页面
+        App\Library\Rpc\RpcServiceProvider::class, //远程过程调用
 
         /*
          * Package Service Providers...

@@ -1,0 +1,4 @@
+1, 增加批量接口调用
+2, 增加json rpc调用方式
+3, HttpService的初始化从RpcManager中改为从外部注册到RpcManager中
+4, 现在log的行为是在HttpService类中写死的， 改为在HttpService注册的时候进行
