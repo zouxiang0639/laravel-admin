@@ -2,8 +2,8 @@
 
 @section('content-header')
     <h1>
-        {!! $classDesc.'->'.$methodDesc !!}
-        &middot;<small><a href="javascript:history.back(-1)">返回</a></small>
+        {!! $classDesc!!}
+        &middot;<small>{!! $methodDesc  !!}</small>
     </h1>
 
 @stop

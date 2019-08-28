@@ -55,6 +55,7 @@ class AdminAuthSeeder extends Seeder
         ]);
 
         MenuBls::storeMenu($menuRequest);
+        $this->api(); //API管理
         $this->admin(); //后台管理
         $this->other(); //其它管理
         $this->system(); //系统管理
@@ -212,5 +213,29 @@ class AdminAuthSeeder extends Seeder
         ]);
         MenuBls::storeMenu($menuRequest);
 
+    }
+
+    public function api()
+    {
+        $menuRequest = new MenuRequest();
+        $menuRequest->merge([
+            'parent_id' => 0,
+            'title' => 'api管理',
+            'icon' => 'fa-plug',
+            'route' => '',
+            'slug' => 'm_api',
+            'permissions' => WhetherConst::YES
+        ]);
+        $menu = MenuBls::storeMenu($menuRequest);
+
+        $menuRequest->merge([
+            'parent_id' => $menu->getKey(),
+            'title' => '接口列表',
+            'icon' => 'fa-align-justify',
+            'route' => 'm.api.demo.list',
+            'slug' => 'm_api_demo',
+            'permissions' => WhetherConst::YES
+        ]);
+        MenuBls::storeMenu($menuRequest);
     }
 }

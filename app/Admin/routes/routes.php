@@ -140,7 +140,7 @@ Route::group([
     //Api
     Route::group(['prefix'=>'api'], function(){
         //ApiDome
-        Route::group(['prefix'=>'demo'], function(){
+        Route::group(['prefix'=>'demo', 'middleware' => 'admin.auth:m_api_demo'], function(){
             Route::get('/', ['uses' => "Api\\ApiDemoController@index", 'as' => 'm.api.demo.list']);
             Route::get('methods', ['uses' => "Api\\ApiDemoController@methods", 'as' => 'm.api.demo.methods']);
             Route::get('detail', ['uses' => "Api\\ApiDemoController@detail", 'as' => 'm.api.demo.detail']);
