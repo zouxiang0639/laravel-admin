@@ -12,22 +12,23 @@ use  App\Library\Rpc\Rpc;
 use App\Library\Rpc\Service\Http\HttpRequest;
 
 /**
- * 测试Sdk
+ * @name 测试Sdk
+ *
  */
 class TestSdk
 {
     const SERVICE_NAME = 'test';
+
     /**
-     * @name userid转openid
-     * 该接口使用场景为企业支付，在使用企业红包和向员工付款时，需要自行将企业微信的userid转成openid
-     * @param $accessToken 调用接口凭证
-     * @param $userid 企业内的成员id
+     * @name 接口测试
+     *
+     * @param $showId
      * @return mixed
      */
-    public static function getOpenidByUserid()
+    public static function getOpenidByUserId($showId)
     {
 
-        return self::call('get:test',['name' => 'a']);
+        return self::call('get:test',['name' => $showId]);
     }
 
     private static function call($api, $param)

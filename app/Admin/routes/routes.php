@@ -137,6 +137,18 @@ Route::group([
 
     });
 
+    //Api
+    Route::group(['prefix'=>'api'], function(){
+        //ApiDome
+        Route::group(['prefix'=>'demo'], function(){
+            Route::get('/', ['uses' => "Api\\ApiDemoController@index", 'as' => 'm.api.demo.list']);
+            Route::get('methods', ['uses' => "Api\\ApiDemoController@methods", 'as' => 'm.api.demo.methods']);
+            Route::get('detail', ['uses' => "Api\\ApiDemoController@detail", 'as' => 'm.api.demo.detail']);
+            Route::post('result', ['uses' => "Api\\ApiDemoController@result", 'as' => 'm.api.demo.result']);
+        });
+
+    });
+
     //示例
     Route::group(['prefix'=>'demo'], function(){
         Route::get('form', ['uses' => "Demo\\WidgetsController@form", 'as' => 'm.demo.form']);

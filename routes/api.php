@@ -18,6 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/test', function (Request $request) {
-   return (new \App\Library\Response\JsonResponse())->success(['a'=>'a']);
+   return (new \App\Library\Response\JsonResponse())->success(['showId'=>$request->name]);
 });
 
