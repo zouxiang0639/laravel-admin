@@ -28,7 +28,7 @@ return [
     /*
      * Use `https`.
      */
-    'secure' => false,
+    'secure' => env('ADMIN_SECURE', false),
 
     /*
      * admin_config 数据库配置注入
