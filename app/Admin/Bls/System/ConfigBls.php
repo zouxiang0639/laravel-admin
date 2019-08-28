@@ -6,6 +6,7 @@ use App\Admin\Bls\System\Model\ConfigModel;
 use App\Admin\Bls\System\Requests\ConfigRequest;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Created by ConfigBls.
@@ -47,6 +48,7 @@ class ConfigBls
      */
     public static function storeConfig(ConfigRequest $request)
     {
+        Cache::forget('config');
         $model = new ConfigModel();
         $model->name = $request->name;
         $model->value = $request->value;
@@ -71,6 +73,7 @@ class ConfigBls
      */
     public static function updateConfig(ConfigModel $model, ConfigRequest $request)
     {
+        Cache::forget('config');
         $model->name = $request->name;
         $model->value = $request->value;
         $model->description = $request->description;
@@ -83,8 +86,13 @@ class ConfigBls
      */
     public static function load()
     {
-        if (DB::select('SHOW TABLES LIKE "admin_config"')) {
+        $config = Cache::get('config');
+
+        if(!empty($config)) {
+            config(['config' => $config]);
+        } elseif (DB::select('SHOW TABLES LIKE "admin_config"')) {
             $model = ConfigModel::all(['name', 'value'])->pluck('value', 'name')->toArray();
+            Cache::forever('config',$model);
             config(['config' => $model]);
         }
     }
@@ -116,6 +124,7 @@ class ConfigBls
      */
     public function configUpdateByArray($array)
     {
+
         foreach($array as $key => $value) {
             $model = ConfigModel::where('name', $key)->first();
             if($model) {
@@ -129,6 +138,7 @@ class ConfigBls
                 $model->save();
             }
         }
+        Cache::forget('config');
         return true;
     }
 }

@@ -16,7 +16,7 @@ class TagsRequest extends JsonResponseValidator
     {
         return [
             'type' => 'required',
-            'tag_name' => 'required',
+            'tag_name' => 'required|unique:admin_tags,tag_name,' . $this->id . ',id,type,' .$this->type,
             'status' => 'required',
         ];
     }
@@ -31,6 +31,7 @@ class TagsRequest extends JsonResponseValidator
         return [
             'type.required' => '标签类型不能为空',
             'tag_name.required' => '标签名称不能为空',
+            'tag_name.unique' => '标签名称已存在',
             'status.required' => '标签状态不能为空',
         ];
     }
