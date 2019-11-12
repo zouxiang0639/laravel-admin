@@ -237,7 +237,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Admin' => App\Library\Admin\Facades\Admin::class,
         'Input' => Illuminate\Support\Facades\Input::class,
-        'Form' => Collective\Html\FormFacade::class,
+        'Forms' => App\Library\Admin\Form\FormFacade::class,
     ],
 
 ];

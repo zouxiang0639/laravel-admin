@@ -31,6 +31,7 @@ class AdvertController extends Controller
      */
     public function index(Request $request)
     {
+
         if($request->type == null) {
             $request->merge(['type' => AdvertTypeConst::BANNER]);
         }
@@ -40,7 +41,6 @@ class AdvertController extends Controller
             $item->typeName = AdvertTypeConst::getDesc($item->type);
             $item->picture = uploads_path($item->picture);
         });
-
         return View::make('admin::other.advert.index',[
             'list' => $list,
             'type' => AdvertTypeConst::desc(true)

@@ -17,6 +17,7 @@
             <div class="pull-left ">
                 <ul class="nav nav-tabs nav-tabs-custom" style="margin-bottom: 0px">
                     @foreach($type as $key => $value)
+                        dd( $key , $value)
                         <li {!! $key == Input::get('type') ?'class="active"' : '' !!}><a href="{!! route('m.other.advert.list', ['type' => $key]) !!}">{!! $value !!}</a></li>
                     @endforeach
                     <li class="pull-right header"></li>

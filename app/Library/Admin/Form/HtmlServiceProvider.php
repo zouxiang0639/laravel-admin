@@ -36,7 +36,7 @@ class HtmlServiceProvider extends ServiceProvider
         $this->registerFormBuilder();
 
         $this->app->alias('html', HtmlBuilder::class);
-        $this->app->alias('form', FormBuilder::class);
+        $this->app->alias('forms', FormBuilder::class);
 
         $this->registerBladeDirectives();
     }
@@ -60,7 +60,7 @@ class HtmlServiceProvider extends ServiceProvider
      */
     protected function registerFormBuilder()
     {
-        $this->app->singleton('form', function ($app) {
+        $this->app->singleton('forms', function ($app) {
             $form = new FormBuilder($app['html'], $app['url'], $app['view'], $app['session.store']->token(), $app['request']);
 
             return $form->setSessionStore($app['session.store']);
@@ -77,7 +77,7 @@ class HtmlServiceProvider extends ServiceProvider
         $this->app->afterResolving('blade.compiler', function (BladeCompiler $bladeCompiler) {
             $namespaces = [
                 'Html' => get_class_methods(HtmlBuilder::class),
-                'Form' => get_class_methods(FormBuilder::class),
+                'Forms' => get_class_methods(FormBuilder::class),
             ];
 
             foreach ($namespaces as $namespace => $methods) {
@@ -102,6 +102,6 @@ class HtmlServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['html', 'form', HtmlBuilder::class, FormBuilder::class];
+        return ['html', 'forms', HtmlBuilder::class, FormBuilder::class];
     }
 }

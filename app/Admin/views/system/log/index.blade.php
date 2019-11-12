@@ -124,6 +124,3 @@
 
 @stop
 
-@section('script')
-
-@stop

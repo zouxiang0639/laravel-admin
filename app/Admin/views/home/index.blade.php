@@ -67,6 +67,7 @@
         </div>
         <!-- ./col -->
     </div>
+
 @stop
 
 @include('admin::partials.toastr')

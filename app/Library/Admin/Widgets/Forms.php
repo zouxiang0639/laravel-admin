@@ -5,7 +5,7 @@ namespace App\Library\Admin\Widgets;
 use App\Library\Admin\Form\FormBuilder;
 use App\Library\Admin\Form\HtmlFormTpl;
 use Illuminate\Support\Collection;
-use Form;
+use Forms as FormsBuilder;
 
 /**
  * Class Form.
@@ -27,7 +27,8 @@ class Forms
     public function __construct()
     {
         $this->date = Collection::make();
-        $this->form = Form::createFormBuilder();
+        $this->form = FormsBuilder::createFormBuilder();
+
     }
 
     /**
@@ -86,7 +87,7 @@ EOT;
     public function getFormHtml()
     {
         $open = array_merge(['class'=> 'form-horizontal box-body fields-group'], $this->open);
-        $this->formHtml .=  Form::open($open);
+        $this->formHtml .=  FormsBuilder::open($open);
 
         $this->date->each(function($item) {
             $this->formHtml .= $this->formGroup($item);
@@ -100,7 +101,7 @@ EOT;
             </a>
         </div>
 EOT;
-        $this->formHtml .=  Form::close();
+        $this->formHtml .=  FormsBuilder::close();
         return $this->formHtml;
     }
 

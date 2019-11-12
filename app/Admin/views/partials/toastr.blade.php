@@ -1,6 +1,6 @@
 @section('style')
     @parent
-    <link rel="stylesheet" href="{{  assets_path("/lib/toastr/build/toastr.min.css") }}">
+    <link rel="stylesheet" href="">
 @stop
 
 
@@ -8,7 +8,7 @@
 @section('script')
     @parent
 
-    <script src="{{  assets_path("/lib/toastr/build/toastr.min.js") }}"></script>
+    <script src="{{  asset('assets/lib/toastr/build/toastr.min.js', config('admin.secure')) }}"></script>
 
     @if(Session::has('toastr'))
         @php
