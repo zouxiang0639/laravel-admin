@@ -32,6 +32,19 @@ if (!function_exists('admin_toastr')) {
     }
 }
 
+if (! function_exists('authority')) {
+
+    /**
+     * 权限节点认证
+     * @param string $permission  //节点别名
+     * @return bool
+     */
+    function authority($permission) {
+        $user = \Auth::guard('admin')->user();
+        return $user->is(\App\Consts\Admin\Role\RoleSlugConst::ROLE_SUPER) || $user->can($permission);
+    }
+}
+
 if (!function_exists('uploads_path')) {
 
     /**
