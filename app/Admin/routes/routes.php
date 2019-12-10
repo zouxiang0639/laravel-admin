@@ -3,7 +3,7 @@
 Route::group([
     'prefix' => 'admin',
     'namespace' => 'App\\Admin\\Controllers',
-    'middleware' => ['web', 'admin'],
+    'middleware' => ['web', 'admin','systemLog'],
 ], function(){
 
     Route::get('/', ['uses' => "HomeController@index", 'as' => 'm.home']);
@@ -116,6 +116,11 @@ Route::group([
         //系统日志
         Route::group(['prefix'=>'log', 'middleware' => 'admin.auth:m_system_log'], function(){
             Route::get('', ['uses' => "System\\LogController@index", 'as' => 'm.system.log.list']);
+        });
+
+        //系统日志
+        Route::group(['prefix'=>'operation', 'middleware' => 'admin.auth:m_system_operation_log'], function(){
+            Route::get('log', ['uses' => "System\\OperationLogController@index", 'as' => 'm.system.operation.log.list']);
         });
 
         //数据空备份
