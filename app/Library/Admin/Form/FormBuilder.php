@@ -325,22 +325,22 @@ EOT;
     public function imageOne($name, $value = null, $options = [])
     {
         $path = $value ? uploads_path($value) : $value;
-        $options['data-initial-preview'] = $path;
         $options['data-initial-caption'] = $value;
         Admin::style()->setCss(StyleTypeConst::FILE, $this->getResource('fileinput.min.css'));
         Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('fileinput.min.js'));
         Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('canvas-to-blob.min.js'));
-
+        $initialPreview = is_null($value) ? '': 'initialPreview: ["'.$path.'"],';
         $route = route('m.system.upload.image');
         $code = <<<EOT
 
             $("input[name=$name]").fileinput({
-                "showRemove": false,
+                showRemove: false,
                 theme: "explorer",
                 uploadUrl: "$route",
-                "browseLabel": "浏览",
-                minFileCount: 1,
-                maxFileCount: 2,
+                $initialPreview
+                browseLabel: "浏览",
+                minFileCount: 0,
+                maxFileCount: 1,
                 overwriteInitial: false,
                 showUpload: false,
                 initialPreviewAsData: true,
