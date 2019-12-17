@@ -76,20 +76,6 @@
         </div>
         <!-- /.box-body -->
     </div>
-    <div class="row form-group">
-        <label class="col-md-2 text-right">
-            <span class="text-danger">*</span>
-            卡面印刷文件:
-        </label>
-        <div class="col-md-6 print_file">
-            <input type="hidden" name="print_file" value="">
-            <span id="print-file-name">
-                <img src="{!! get_file_img('/2019/12/17/e317c6ba9775db2bba60f9f8e7081079.JPG') !!}" width="300" height="173" style="float:left">
-			</span>
-
-            <a id="print-file" href="javascript:;" class="btn btn-default btn-xs">上传印刷文件</a>
-        </div>
-    </div>
 
 @stop
 
@@ -112,51 +98,7 @@
                     $(this).text(value);
                 }
             });
+        });
 
-
-          $('#ico').click(function(){
-            layer.open({
-              type: 2,
-              title: '上传文件',
-              maxmin: true,
-              area: ['500px', '450px'],
-              content: 'http://my.purchase.com/admin/system/upload/show?ext=&size=300mb',
-            btn:['保存', '关闭'],
-              yes:function(index, layero) {
-              var file = $(layero).find("iframe")[0].contentWindow.getFile();
-              if(file) {
-                $('input[name=ico]').val(file.path);
-                $('#mig_ico').find('img').attr("src",'http://my.purchase.com/uploads/'+file.path);
-                layer.close(index);
-              } else {
-                swal('请上传图片', '', 'error');
-              }
-
-            }
-          });
-
-
-          $('#print-file').click(function(){
-            layer.open({
-              type: 2,
-              title: '上传文件',
-              maxmin: true,
-              area: ['500px', '450px'],
-              content: '{!! route('m.system.upload.show', ['ext' => '','size'=>'300mb']) !!}',
-              btn:['保存', '关闭'],
-              yes:function(index, layero) {
-                var file = $(layero).find("iframe")[0].contentWindow.getFile();
-                if(file) {
-                  $('input[name=print_file]').val(file.path);
-                  $('#print-file-name').find('img').attr("src",'{!! get_file_img('') !!}'+file.path);
-                  layer.close(index);
-                } else {
-                  swal('请上传图片', '', 'error');
-                }
-
-              }
-            });
-          });
-        })
     </script>
 @stop
