@@ -5,3 +5,6 @@
 .kv-file-content img{
     max-width: 100%;
 }
+.sweet-alert{
+    z-index: 99999999999 !important;
+}

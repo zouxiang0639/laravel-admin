@@ -85,7 +85,8 @@ Route::group([
 
         //上传文件
         Route::group(['prefix'=>'upload'], function(){
-            Route::put('image', ['uses' => "System\\UploadController@image", 'as' => 'm.system.upload.image']);
+            Route::post('image', ['uses' => "System\\UploadController@image", 'as' => 'm.system.upload.image']);
+            Route::get('show', ['uses' => "System\\UploadController@show", 'as' => 'm.system.upload.show']);
             Route::put('ckeditor', ['uses' => "System\\UploadController@ckeditor", 'as' => 'm.system.upload.ckeditor']);
         });
 
