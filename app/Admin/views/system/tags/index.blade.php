@@ -23,15 +23,17 @@
                         <li class="pull-right header"></li>
                     </ul>
                 </div>
-                {!! Form::open(['method' => 'GET', 'class'=>'form-inline panel panel-body']) !!}
-                <input type="hidden" name="type" value="{!! Input::get('type') !!}">
-                <div class="form-group">
-                    <label>父级标签:</label>
-                    {!! Form::select2('parent_id',$parent,Input::get('parent_id'),['style'=>"width:200px"]) !!}
-                </div>
+                @if(!empty($type))
+                    {!! Form::open(['method' => 'GET', 'class'=>'form-inline panel panel-body']) !!}
+                    <input type="hidden" name="type" value="{!! Input::get('type') !!}">
+                    <div class="form-group">
+                        <label>父级标签:</label>
+                        {!! Form::select2('parent_id',$parent,Input::get('parent_id'),['style'=>"width:200px"]) !!}
+                    </div>
 
-                {!! Form::submit('查询', ['id'=>'', 'class'=>'btn btn-primary']) !!}
-                {!! Form::close() !!}
+                    {!! Form::submit('查询', ['id'=>'', 'class'=>'btn btn-primary']) !!}
+                    {!! Form::close() !!}
+                @endif
 
             </div>
 

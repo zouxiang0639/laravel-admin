@@ -80,7 +80,7 @@ $(function(){
                 error = formValidate();
                 if (error != '') {
                     error.forEach(function(e) {
-                        $('.'+ e.class).after("<div class='text-danger' style='line-height: 20px;'>" + e.error + "</div>");
+                        $('.'+ e.class).after("<div class='text-danger col-sm-3' style='line-height: 20px;'>" + e.error + "</div>");
                     });
                     return false;
                 }
@@ -107,7 +107,7 @@ $(function(){
                 if(res.code == 1010001) {
                     var error = res.data;
                     for ( var i in error ) {
-                        $('.'+i).after("<div class='text-danger'>" + error[i][0] + "</div>");
+                        $('.'+i).after("<div class='text-danger col-sm-3'>" + error[i][0] + "</div>");
                     }
                     _this.attr('disabled',false);
                     locked = true;
