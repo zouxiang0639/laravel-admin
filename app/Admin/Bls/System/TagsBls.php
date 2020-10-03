@@ -28,6 +28,9 @@ class TagsBls
         if(!empty($request->id)) {
             $model->where('id', $request->id);
         }
+        if(!empty($request->parent_id)) {
+            $model->where('parent_id', $request->parent_id);
+        }
 
         $model->where('type', $request->type);
 

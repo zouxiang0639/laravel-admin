@@ -33,11 +33,19 @@ class TagsController extends Controller
         if(empty($request->type)) {
             $request->merge(['type' => TagsTypeConst::TAG]);
         }
+        $parent = [];
+
+        $type = TagsTypeConst::getParent($request->type);
+        if($type){
+            $parent = TagsBls::getTagsByType($type)->pluck('tag_name','id')->toArray();
+        }
 
         $list = TagsBls::getTagsList($request);
 
         return View::make('admin::system.tags.index',[
             'list' => $list,
+            'parent' => $parent,
+            'type' => $type,
             'tagsType' => TagsTypeConst::desc()
         ]);
     }

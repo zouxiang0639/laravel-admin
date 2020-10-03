@@ -15,12 +15,24 @@
     <div class="box">
         <div class="box-header">
             <div class="pull-left ">
-                <ul class="nav nav-tabs nav-tabs-custom" style="margin-bottom: 0px">
-                    @foreach($tagsType as $key => $value)
-                        <li {!! $key == Input::get('type') ?'class="active"' : '' !!}><a href="{!! route('m.system.tags.list', ['type' => $key]) !!}">{!! $value !!}</a></li>
-                    @endforeach
-                    <li class="pull-right header"></li>
-                </ul>
+                <div class="">
+                    <ul class="nav nav-tabs nav-tabs-custom" style="margin-bottom: 0px">
+                        @foreach($tagsType as $key => $value)
+                            <li {!! $key == Input::get('type') ?'class="active"' : '' !!}><a href="{!! route('m.system.tags.list', ['type' => $key]) !!}">{!! $value !!}</a></li>
+                        @endforeach
+                        <li class="pull-right header"></li>
+                    </ul>
+                </div>
+                {!! Form::open(['method' => 'GET', 'class'=>'form-inline panel panel-body']) !!}
+                <input type="hidden" name="type" value="{!! Input::get('type') !!}">
+                <div class="form-group">
+                    <label>父级标签:</label>
+                    {!! Form::select2('parent_id',$parent,Input::get('parent_id'),['style'=>"width:200px"]) !!}
+                </div>
+
+                {!! Form::submit('查询', ['id'=>'', 'class'=>'btn btn-primary']) !!}
+                {!! Form::close() !!}
+
             </div>
 
             <div class="pull-right">
@@ -40,6 +52,9 @@
                 <tr>
                     <th>编号</th>
                     <th>热度</th>
+                    @if(!empty($type))
+                        <th>父级标签名称</th>
+                    @endif
                     <th>标签名称</th>
                     <th>状态</th>
                     <th>创建时间</th>
@@ -52,6 +67,9 @@
                         <td>
                             <a href="javascript:;" class="hot" data-pk="{!! $item->id !!}">{!! $item->hot !!}</a>
                         </td>
+                        @if(!empty($type))
+                            <td>{{ $item->oneParent ? $item->oneParent->tag_name : '-' }}</td>
+                        @endif
                         <td>{{ $item->tag_name }}</td>
                         <td class="switch_submit" data-href="{!! route('m.system.tags.status', ['id' => $item->id]) !!}">
                             {!! Form::switchOff('switch_submit', $item->status) !!}
