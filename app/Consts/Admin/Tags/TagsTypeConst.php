@@ -20,4 +20,16 @@ class TagsTypeConst
         return array_get(self::desc(), $item);
     }
 
+    public static function parent()
+    {
+        return [
+            self::TAG => self::TAG,
+        ];
+    }
+
+    public static function getParent($item)
+    {
+        return array_get(self::parent(), $item);
+    }
+
 }
