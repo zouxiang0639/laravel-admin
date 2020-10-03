@@ -57,6 +57,7 @@ class TagsBls
         $model->type = $request->type;
         $model->tag_name = $request->tag_name;
         $model->status = $request->status;
+        $model->parent_id = $request->parent_id ?: 0;
         $model->hot = intval($request->hot);
         return $model->save();
     }
@@ -73,6 +74,7 @@ class TagsBls
         $model->tag_name = $request->tag_name;
         $model->status = $request->status;
         $model->hot = intval($request->hot);
+        $model->parent_id = $request->parent_id ?: 0;
         return $model->save();
     }
 
