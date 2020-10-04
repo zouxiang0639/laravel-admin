@@ -137,12 +137,14 @@ EOT;
         Admin::style()->setCss(StyleTypeConst::FILE, $this->getResource('select2.min.css'));
         Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('select2.full.min.js'));
 
+        $placeholder = isset($selectAttributes['placeholder']) ? $selectAttributes['placeholder'] : '请选择';
         $code = <<<EOT
 
             $("select[name='$name']").select2({
                 allowClear: true,
                 placeholder: "$name",
-                separator:true
+                separator:true,
+                placeholder : "$placeholder",
             });\n
 EOT;
         Admin::style()->setJs(StyleTypeConst::CODE, $code);
