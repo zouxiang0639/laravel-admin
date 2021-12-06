@@ -182,6 +182,9 @@ return [
         App\Library\Admin\Form\HtmlServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
 
+        //swoole
+        SwooleTW\Http\LaravelServiceProvider::class,
+
        /*
         *  验证服务
         */

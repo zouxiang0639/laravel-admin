@@ -40,6 +40,8 @@ class UserController extends Controller
      */
     public function create()
     {
+        // sending to all clients in 'game' room except sender
+
         return View::make('admin::auth.user.create', [
             'form' => $this->form([]),
         ]);

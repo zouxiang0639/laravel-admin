@@ -41,6 +41,7 @@ class Authenticate
      */
     public function handle($request, Closure $next, $permissionCode = '')
     {
+        dump(session()->getId());
         //如果是数据库还原就跳出所有权限
         if(config('admin.data_backup_import')) {
             if (in_array(\Request::route()->getName(), ['m.system.backup.import.put', 'm.system.backup.import'])) {

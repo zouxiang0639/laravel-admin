@@ -12,7 +12,8 @@
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.5",
         "mews/captcha": "^2.2",
-        "spatie/db-dumper": "^2.10"
+        "spatie/db-dumper": "^2.10",
+        "swooletw/laravel-swoole": "^2.8"
     },
     "require-dev": {
         "filp/whoops": "~2.0",
