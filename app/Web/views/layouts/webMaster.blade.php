@@ -10,6 +10,7 @@
 <body>
 
 @include('web::partials.header')
+@include('web::partials.menu')
 
 @yield('content')
 

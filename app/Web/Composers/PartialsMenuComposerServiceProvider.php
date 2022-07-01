@@ -1,7 +1,9 @@
 <?php
 namespace App\Web\Composers;
 
+use App\Admin\Bls\Client\NavBls;
 use App\Admin\Bls\System\ConfigBls;
+use App\Consts\Admin\Client\NavCategoryConst;
 use Illuminate\Http\Request;
 
 /**
@@ -19,11 +21,7 @@ class PartialsMenuComposerServiceProvider
 
     public function compose($view)
     {
-        $config = ConfigBls::getConfig();
-
-        $view->with('title', $config['title'])
-        ->with('keywords', $config['keywords'])
-        ->with('ico', $config['ico'])
-        ->with('description', $config['description']);
+        $menu = NavBls::menuTree(NavCategoryConst::HEADER);
+        $view->with('menu', $menu);
     }
 }

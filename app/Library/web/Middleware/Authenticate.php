@@ -41,7 +41,6 @@ class Authenticate
      */
     public function handle($request, Closure $next, $permissionCode = '')
     {
-
         return $next($request);
     }
 

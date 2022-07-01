@@ -8,7 +8,7 @@ class WebServiceProvider extends ServiceProvider
 {
 
     protected $routeMiddleware = [
-        'web.auth'       => \App\Library\Web\Middleware\Authenticate::class,
+        'home.auth'       => \App\Library\Web\Middleware\Authenticate::class,
     ];
 
     /**
@@ -17,8 +17,8 @@ class WebServiceProvider extends ServiceProvider
      * @var array
      */
     protected $middlewareGroups = [
-        'web' => [
-            'web.auth',
+        'home' => [
+            'home.auth',
         ],
     ];
 
@@ -66,6 +66,7 @@ class WebServiceProvider extends ServiceProvider
      */
     protected function registerRouteMiddleware()
     {
+
         // register route middleware.
         foreach ($this->routeMiddleware as $key => $middleware) {
             app('router')->aliasMiddleware($key, $middleware);
@@ -75,5 +76,6 @@ class WebServiceProvider extends ServiceProvider
         foreach ($this->middlewareGroups as $key => $middleware) {
             app('router')->middlewareGroup($key, $middleware);
         }
+
     }
 }

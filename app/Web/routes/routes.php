@@ -6,7 +6,7 @@ Route::group([
     'middleware' => [],
 ], function(){
 
-    Route::get('/', ['uses' => "HomeController@index", 'as' => 'm.home']);
+    Route::get('/', ['uses' => "HomeController@index", 'as' => 'w.home']);
 
 });
 
