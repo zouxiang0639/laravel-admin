@@ -1,4 +1,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+@if(!empty($ico))
+    <link href="{{$ico}}" rel="shortcut icon">
+@endif
+
 <title>{{$title}}</title>
-<meta name="keywords" content="中冶横天,自动化,绿色科技,环境监测,工业过程分析,环保治理">
-<meta name="description" content="中冶横天,自动化,绿色科技,环境监测,工业过程分析,环保治理">
+<meta name="keywords" content="{{$keywords}}">
+<meta name="description" content="{{$description}}">

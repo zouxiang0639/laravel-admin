@@ -80,6 +80,15 @@ class ConfigBls
         return $model->save();
     }
 
+    public static function getConfig()
+    {
+        $config = Cache::get('config');
+        if (!empty($config)) {
+           return $config;
+        } else {
+            return ConfigModel::all(['name', 'value'])->pluck('value', 'name')->toArray();
+        }
+    }
 
     /**
      * 注入配置

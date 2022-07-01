@@ -15,7 +15,8 @@ class WebComposerServiceProvider extends ServiceProvider
     public function boot()
     {
 
-        View::composer('web::partials.style', 'App\Web\Composers\CommonComposer');
+        View::composer('web::partials.style', 'App\Web\Composers\PartialsStyleComposerServiceProvider');
+        View::composer('web::partials.menu', 'App\Web\Composers\PartialsMenuComposerServiceProvider');
 
     }
 

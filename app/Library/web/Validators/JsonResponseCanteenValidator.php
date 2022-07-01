@@ -1,5 +1,5 @@
 <?php
-namespace App\Library\web\Validators;
+namespace App\Library\Web\Validators;
 
 use App\Exceptions\LogicException;
 use Illuminate\Contracts\Validation\Validator;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Library\web\Middleware;
+namespace App\Library\Web\Middleware;
 
 use App\Consts\Admin\Role\RoleSlugConst;
 use App\Consts\Common\WhetherConst;
