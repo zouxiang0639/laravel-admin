@@ -46,9 +46,9 @@ class PageTemplateConst
     {
         switch($template) {
             case self::PAGE:
-                return 'm.client.news.list';
+                return 'w.page';
             case self::NEWS:
-                return 'm.client.news.list';
+                return 'w.news';
             default :
                 return '';
         }
