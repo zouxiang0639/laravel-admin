@@ -64,8 +64,14 @@ class PageBls
     public static function getPageBySeo(PageModel $model)
     {
         $config = config('config');
+
+        $title = $config['title'];
+        if (!empty($model->title)) {
+            $title +=  '-' . $model->title;
+        }
+
         return [
-            'title' => $config['title'] . '-' . $model->title,
+            'title' => $title,
             'keywords' => empty($model->keywords) ? $config['keywords'] : $model->keywords,
             'description' => empty($model->description) ? $config['description'] : $model->description,
         ];
