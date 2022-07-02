@@ -69,5 +69,14 @@ class PageUtil
             'seo' => $seo
         ];
     }
+
+    public static function getSeo()
+    {
+        $model = new \stdClass();
+        $model->title = "";
+        $model->keywords = "";
+        $model->description = "";
+        return PageBls::getPageBySeo($model);
+    }
 }
 
