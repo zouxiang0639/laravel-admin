@@ -40,5 +40,34 @@ class PageUtil
             'pageTitle' => $pageTitle
         ];
     }
+
+    public static function getList($class, $pageId, Request $request, $order = '`id` DESC', $limit = 20)
+    {
+        $bls = new $class();
+        $request->cid = $pageId;
+        return $bls->getList($request, $order , $limit );
+    }
+
+    public static function getListInfo($class, $id)
+    {
+        $bls = new $class();
+        $info = $bls->find($id);
+        if (empty($info)) {
+            abort(404);
+        }
+
+        $page = PageBls::find($info['page_id']);
+        if (empty($page)) {
+            abort(404);
+        }
+
+        $seo = PageBls::getPageBySeo($info);
+
+        return [
+            'info' => $info,
+            'page' => $page,
+            'seo' => $seo
+        ];
+    }
 }
 
