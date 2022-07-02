@@ -68,7 +68,7 @@ class PageBls
 
         $title = $config['title'];
         if (!empty($model->title)) {
-            $title +=  '-' . $model->title;
+            $title .=  '-' . $model->title;
         }
 
         return [
