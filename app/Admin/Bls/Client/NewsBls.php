@@ -31,6 +31,10 @@ class NewsBls
             $model->where('page_id', $request->cid);
         }
 
+        if(!empty($request->status)) {
+            $model->where('status', $request->status);
+        }
+
         return $model->orderBy('order','desc')->orderByRaw($order)->paginate($limit);
     }
 
@@ -108,6 +112,13 @@ class NewsBls
             'keywords' => empty($model->keywords) ? $config['keywords'] : $model->keywords,
             'description' => empty($model->description) ? $config['description'] : $model->description,
         ];
+    }
+
+    public static function storePageView($id)
+    {
+       return NewsModel::where('id', $id)->update([
+            "pageview" => \DB::raw("pageview + 1")
+        ]);
     }
 }
 
