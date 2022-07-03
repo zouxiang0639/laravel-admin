@@ -46,7 +46,7 @@ class PageUtil
     {
         $bls = new $class();
         $request->cid = $pageId;
-        return $bls->getList($request, $order , $limit );
+        return $bls->getList($request, $order, $limit);
     }
 
     public static function getListInfo($class, $id)
@@ -62,7 +62,7 @@ class PageUtil
             abort(404);
         }
 
-        $nav = NavBls::getNav($page->id,NavCategoryConst::HEADER);
+        $nav = NavBls::getNav($page->id, NavCategoryConst::HEADER);
         if (empty($nav)) {
             abort(404);
         }
@@ -92,6 +92,12 @@ class PageUtil
         $model->keywords = "";
         $model->description = "";
         return PageBls::getPageBySeo($model);
+    }
+
+    public static function storePageView($class, $id)
+    {
+        $bls = new $class();
+        return $bls->storePageView($id);
     }
 }
 
