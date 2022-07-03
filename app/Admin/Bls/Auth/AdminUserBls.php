@@ -102,6 +102,15 @@ class AdminUserBls
             return $model->delete();
         });
     }
+    /**
+     * 通过名称精确查询名称
+     * @param  varchar  $name   名称描述
+     * @return json             返回一条查询到的数据
+     */
+    public static function getDataByOnlyName($name)
+    {
+        return AdministratorModel::where('name',$name)->first();
+    }
 
 }
 

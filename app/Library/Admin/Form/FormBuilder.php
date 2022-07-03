@@ -40,7 +40,10 @@ class FormBuilder extends \Collective\Html\FormBuilder
 
         //颜色
         'bootstrap-colorpicker.min.css' =>'/lib/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css',
-        'bootstrap-colorpicker.min.js' =>'/lib/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js'
+        'bootstrap-colorpicker.min.js' =>'/lib/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',
+
+        //layer
+        'layer.js' =>'/lib/layer-alert/layer.js'
     ];
 
     /**
@@ -134,12 +137,14 @@ EOT;
         Admin::style()->setCss(StyleTypeConst::FILE, $this->getResource('select2.min.css'));
         Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('select2.full.min.js'));
 
+        $placeholder = isset($selectAttributes['placeholder']) ? $selectAttributes['placeholder'] : '请选择';
         $code = <<<EOT
 
             $("select[name='$name']").select2({
                 allowClear: true,
                 placeholder: "$name",
-                separator:true
+                separator:true,
+                placeholder : "$placeholder",
             });\n
 EOT;
         Admin::style()->setJs(StyleTypeConst::CODE, $code);
@@ -324,52 +329,48 @@ EOT;
      */
     public function imageOne($name, $value = null, $options = [])
     {
-        $path = $value ? uploads_path($value) : $value;
-        $options['data-initial-preview'] = $path;
-        $options['data-initial-caption'] = $value;
-        Admin::style()->setCss(StyleTypeConst::FILE, $this->getResource('fileinput.min.css'));
-        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('fileinput.min.js'));
-        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('canvas-to-blob.min.js'));
-
-        $route = route('m.system.upload.image');
+        $path = $value ? get_file_img($value) : $value;
+        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('layer.js'));
+        $route = get_file_img('');
+        $content = route('m.system.upload.show', ['ext' => '','size'=>'300mb']);
+        $style = $value ? '' :  'display: none';
         $code = <<<EOT
 
-            $("input[name=$name]").fileinput({
-                "showRemove": false,
-                theme: "explorer",
-                uploadUrl: "$route",
-                "browseLabel": "浏览",
-                minFileCount: 1,
-                maxFileCount: 2,
-                overwriteInitial: false,
-                showUpload: false,
-                initialPreviewAsData: true,
-                allowedFileExtensions: ['jpg', 'png', 'gif'],
-                msgInvalidFileExtension: '文件 "{name}". 扩展名无效, 只支持 "{extensions}" 扩展名',
-                uploadExtraData: {
-                    "_token": $('meta[name="csrf-token"]').attr('content'),
-                    "_method": "PUT",
-                    "name": "$name"
-                },
-                preferIconicPreview: true
-            }).on("filebatchselected", function(event, files) {
-                if(files['length'] > 0) {
-                    $(this).fileinput("upload");
+            $('#$name').click(function(){
+            layer.open({
+              type: 2,
+              title: '上传文件',
+              maxmin: true,
+              area: ['500px', '450px'],
+              content: '$content',
+              btn:['保存', '关闭'],
+              yes:function(index, layero) {
+                var file = $(layero).find("iframe")[0].contentWindow.getFile();
+                if(file) {
+                  $('input[name=$name]').val(file.path);
+                  $('#mig_$name').find('img').attr("src",'$route'+file.path).show();
+                  $('#mig_$name').find('a').attr("href",'$route'+file.path);
+                  layer.close(index);
+                } else {
+                  swal('请上传图片', '', 'error');
                 }
-            }).on("fileuploaded", function(event, data) {
-                if(data.response) {
-                    $(this).fileinput("reset");
-                    $(this).fileinput("cancel");
 
-                    $('.kv-upload-progress').hide();
-                    $('.$name .file-preview-image').attr('src',data.response.data.url);
-                    $(".$name").find('input[name=$name]').val(data.response.data.filePath)
-                }
-            });\n
+              }
+            });
+          });\n
 EOT;
         Admin::style()->setJs(StyleTypeConst::CODE, $code);
 
-        return self::hidden($name, $value).self::file($name, $options);
+        $html = <<<EOT
+            <span id="mig_$name" >
+            <a target="_blank" href="$path">
+                <img src="$path" width="300" height="173" style="float:left; $style" >
+            </a>
+			</span>
+            <a style="margin-left: 10px" id="$name" href="javascript:;" class="btn btn-default btn-xs">上传图片</a>\n
+EOT;
+
+        return self::hidden($name, $value).$html;
     }
 
     /**
