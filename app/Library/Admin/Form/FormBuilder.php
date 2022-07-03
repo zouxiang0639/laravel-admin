@@ -373,6 +373,152 @@ EOT;
         return self::hidden($name, $value).$html;
     }
 
+    public function multiImage($name, $value = null, $options = []) {
+        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('layer.js'));
+        $route = get_file_img('');
+        $content = route('m.system.upload.show', ['ext' => '','size'=>'300mb']);
+
+        $isAdd =  $value ? true : false;
+        $code = <<<EOT
+                    function {$name}DeleteDetails(obj) {
+                            $(obj).parent().parent().remove();
+                        }
+
+                        /**
+                         * 添加发票明细
+                         */
+                        function {$name}AddDetails (boole) {
+                            if (boole != true) {
+                                $('#{$name}_contents').append($("#{$name}_contents_clone .{$name}_clone").clone());
+                            }
+
+                        }
+
+                        function {$name}MultiImageUpload (obj) {
+
+                            layer.open({
+                                type: 2,
+                                title: '上传文件',
+                                maxmin: true,
+                                area: ['500px', '450px'],
+                                content: '$content',
+                                btn:['保存', '关闭'],
+                                yes:function(index, layero) {
+                                    var file = $(layero).find("iframe")[0].contentWindow.getFile();
+                                    if(file) {
+                                        $(obj).next().val(file.path);
+                                        $(obj).prev().find('img').attr("src",'$route'+file.path).show();
+                                        $(obj).prev().find('a').attr("href",'$route'+file.path);
+                                        layer.close(index);
+                                    } else {
+                                        swal('请上传图片', '', 'error');
+                                    }
+
+                                }
+                            });
+                        }
+
+                        $(function() {
+                            {$name}AddDetails({$isAdd})
+                        })
+\n
+EOT;
+
+        Admin::style()->setJs(StyleTypeConst::JS_CODE_FUNCTION, $code);
+        $thead = '';
+        $tbody = '';
+        $extend = [
+            ["name" => "aaa", "title" => "张","attribute"=>"textarea"],
+            ["name" => "aaa2", "title" => "张2","attribute"=>"textarea"]
+        ];
+
+        foreach ($extend as $item) {
+            $thead .= "<th>{$item['title']}</th>";
+
+            $extendFrom = call_user_func_array(
+                [$this, $item["attribute"]],
+                [$name."[{$item['name']}][]",'', $options]
+            );
+
+            $tbody .= "<td>$extendFrom</td>";
+        }
+
+        $html = <<<EOT
+                       <table>
+                            <tfoot id="{$name}_contents_clone" style="display: none">
+                            <tr class="{$name}_clone">
+                                <td>
+                                    <span class="mig_multiImage" >
+                                    <a target="_blank" class="multiImage_a" href="">
+                                        <img class="multiImage_img" src="" max-width="300" max-height="173" style="float:left; display: none;"  >
+                                    </a>
+                                    </span>
+                                    <a style="margin-left: 10px" onclick="{$name}MultiImageUpload(this)" href="javascript:;" class="btn btn-default btn-xs">上传图片</a>
+                                    <input name="multiImage[img][]" class="multiImage_input" type="hidden" value="">
+                                </td>
+                                {$tbody}
+                                <td style="text-align: center;">
+                                    <button type="button" onclick="{$name}DeleteDetails(this) " class="btn btn-default btn-xs">-</button>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+EOT;
+        Admin::style()->setJs(StyleTypeConst::HTML, $html);
+
+        $valueHtml = '';
+        foreach ($value as $item) {
+            $valueTbody = '';
+            foreach ($extend as $n) {
+
+                $extendFrom = call_user_func_array(
+                    [$this, $n["attribute"]],
+                    [$name."[{$n['name']}][]",$item[$n['name']], $options]
+                );
+                $valueTbody .= "<td>$extendFrom</td>";
+            }
+
+            $style = $item['img'] ? '' :  'display: none';
+            $path = $value ? get_file_img($item['img']) : $value;
+            $valueHtml .= <<<EOT
+                <tr class="{$name}_clone">
+                    <td>
+                        <span class="mig_multiImage" >
+                        <a target="_blank" class="multiImage_a" href="{$path}">
+                            <img class="multiImage_img" src="{$path}" max-width="300" max-height="173" style="float:left; $style" >
+                        </a>
+                        </span>
+                        <a style="margin-left: 10px" onclick="{$name}MultiImageUpload(this)" href="javascript:;" class="btn btn-default btn-xs">上传图片</a>
+                        <input name="multiImage[img][]" class="multiImage_input" type="hidden" value="{$item['img']}">
+                    </td>
+                    {$valueTbody}
+                    <td style="text-align: center;">
+                        <button type="button" onclick="{$name}DeleteDetails(this) " class="btn btn-default btn-xs">-</button>
+                    </td>
+                </tr>
+EOT;
+
+        }
+        $data = <<<EOT
+                        <button type="button" onclick="{$name}AddDetails()" class="btn btn-default" >添加</button>
+                        <table class="table table-bordered">
+                          <thead>
+                                <tr>
+                                    <th>上传图片</th>
+                                    {$thead}
+                                    <th>删除</th>
+                                </tr>
+                            </thead>
+                            <tbody id="{$name}_contents">
+                            {$valueHtml}
+                            </tbody >
+                        </table>
+
+                     
+EOT;
+        return $data;
+    }
+
     /**
      * 开关
      * @param $name
