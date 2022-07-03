@@ -36,6 +36,6 @@ class PageController extends Controller
 
         $data = PageUtil::getListInfo(NewsBls::class,$id);
 
-        return view('web::page.news', $data);
+        return view('web::page.newsInfo', $data);
     }
 }
