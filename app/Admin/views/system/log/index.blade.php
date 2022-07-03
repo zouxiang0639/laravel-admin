@@ -6,7 +6,7 @@
 
 @section('content-header')
     <h1>
-        系统日志<small>列表</small>
+        系统错误日志<small>列表</small>
     </h1>
 @stop
 
@@ -17,7 +17,7 @@
         <div class="col-md-10">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">系统日志</h3>
+                    <h3 class="box-title">系统错误日志</h3>
                     <div class="pull-right">
                         <div class="btn-group">
                         @if ($prevUrl)

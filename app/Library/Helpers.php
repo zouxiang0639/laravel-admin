@@ -32,6 +32,46 @@ if (!function_exists('admin_toastr')) {
     }
 }
 
+if (!function_exists('get_file_img')) {
+
+    /**
+     * Flash a toastr message bag to session.
+     *
+     * @param array  $path
+     *
+     * @return string
+     */
+    function get_file_img($path)
+    {
+        switch (config("upload.upload_drive")) {
+            case 'local' :  //本地上传
+                return \Storage::disk('admin')->url($path);
+                break;
+            case 'upyun' : //upyun是又拍云
+                return config("upload.upyun_domain") . $path;
+                break;
+            default:
+                throwException(new LogicException('没有这个批改类型！'));
+                break;
+        }
+
+
+    }
+}
+
+if (! function_exists('authority')) {
+
+    /**
+     * 权限节点认证
+     * @param string $permission  //节点别名
+     * @return bool
+     */
+    function authority($permission) {
+        $user = \Auth::guard('admin')->user();
+        return $user->is(\App\Consts\Admin\Role\RoleSlugConst::ROLE_SUPER) || $user->can($permission);
+    }
+}
+
 if (!function_exists('uploads_path')) {
 
     /**
