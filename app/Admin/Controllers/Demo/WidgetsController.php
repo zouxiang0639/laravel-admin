@@ -100,7 +100,12 @@ class WidgetsController extends Controller
                         "aaa" => "sdf",
                         "aaa2" => "sdfsdaS"
                       ]];
-                $h->input = $form->multiImage('multiImage',$data , $h->options);
+
+                $extend = [
+                    ["name" => "aaa", "title" => "张","attribute"=>"textarea"],
+                    ["name" => "aaa2", "title" => "张2","attribute"=>"textarea"]
+                ];
+                $h->input = $form->multiImage('multiImage',$data, $extend, $h->options);
                 $h->set('multiImage', true);
             });
 
