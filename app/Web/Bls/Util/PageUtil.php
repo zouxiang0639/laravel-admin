@@ -67,7 +67,7 @@ class PageUtil
             abort(404);
         }
 
-        $pageTitle = $info['title'];
+        $pageTitle = $page->title;
 
         if (!empty($nav['title'])) {
             $pageTitle = $nav['title'];
