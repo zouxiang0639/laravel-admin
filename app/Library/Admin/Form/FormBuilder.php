@@ -485,7 +485,7 @@ EOT;
                         </a>
                         </span>
                         <a style="margin-left: 10px" onclick="{$name}MultiImageUpload(this)" href="javascript:;" class="btn btn-default btn-xs">上传图片</a>
-                        <input name="multiImage[img][]" class="multiImage_input" type="hidden" value="{$item['img']}">
+                        <input name="{$name}[img][]" type="hidden" value="{$item['img']}">
                     </td>
                     {$valueTbody}
                     <td style="text-align: center;">
