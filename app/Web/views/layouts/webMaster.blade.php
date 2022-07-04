@@ -10,12 +10,13 @@
 <body>
 
 @include('web::partials.header')
-@include('web::partials.menu')
+
 
 @yield('content')
 
 @include('web::partials.footer')
 
 @include('web::partials.script')
+@yield('script')
 </body>
 </html>
