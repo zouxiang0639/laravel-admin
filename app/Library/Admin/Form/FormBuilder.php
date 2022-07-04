@@ -373,7 +373,7 @@ EOT;
         return self::hidden($name, $value).$html;
     }
 
-    public function multiImage($name, $value = null, $options = []) {
+    public function multiImage($name, $value = [], $extend = [], $options = []) {
         Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('layer.js'));
         $route = get_file_img('');
         $content = route('m.system.upload.show', ['ext' => '','size'=>'300mb']);
@@ -427,10 +427,6 @@ EOT;
         Admin::style()->setJs(StyleTypeConst::JS_CODE_FUNCTION, $code);
         $thead = '';
         $tbody = '';
-        $extend = [
-            ["name" => "aaa", "title" => "张","attribute"=>"textarea"],
-            ["name" => "aaa2", "title" => "张2","attribute"=>"textarea"]
-        ];
 
         foreach ($extend as $item) {
             $thead .= "<th>{$item['title']}</th>";
