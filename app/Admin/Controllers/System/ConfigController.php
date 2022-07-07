@@ -12,6 +12,7 @@ use App\Library\Response\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Admin;
+use Illuminate\Support\Facades\Cache;
 use View;
 
 /**
@@ -183,6 +184,20 @@ class ConfigController extends Controller
     public function setPost(Request $request)
     {
         if((new ConfigBls())->configUpdateByArray($request->all())) {
+            return (new JsonResponse())->success('操作成功');
+        } else {
+            throw new LogicException(1010002, '操作失败');
+        }
+    }
+
+    /**
+     * 清除缓存
+     *
+     */
+    public function clearCache()
+    {
+        Cache::forget('config');
+        if(true) {
             return (new JsonResponse())->success('操作成功');
         } else {
             throw new LogicException(1010002, '操作失败');
