@@ -180,6 +180,60 @@ $(function(){
         );
     });
 
+
+    /**
+     *  数据post
+     */
+    $('.item-post').click(function() {
+
+        var _this = $(this);
+
+        swal({
+                title: _this.attr('data-title'),
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                closeOnConfirm: false,
+                cancelButtonText: "取消"
+            },
+            function(){
+
+                if (! locked) {
+                    return false;
+                }
+
+                locked = false;
+                $.ajax({
+                    url: _this.attr('data-url'),
+                    type: 'POST',
+                    data: {
+                        "_method":"post",
+                        "_token":$('meta[name="csrf-token"]').attr('content')
+                    },
+                    cache: false,
+                    dataType: 'json',
+                    success:function(res) {
+
+                        if(res.code != 0) {
+                            swal(res.data, '', 'error');
+                            locked = true;
+                        } else {
+                            swal(res.data, '', 'success');
+                            window.location.href = document.location;
+                        }
+                    },
+                    error:function () {
+                        locked = true;
+                    }
+
+                });
+
+            }
+        );
+    });
+
+
     /**
      *  开关状态更新
      */
