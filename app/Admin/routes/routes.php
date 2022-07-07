@@ -161,6 +161,7 @@ Route::group([
             Route::delete('destroy/{id}', ['uses' => "System\\ConfigController@destroy", 'as' => 'm.system.config.destroy']);
             Route::get('/set', ['uses' => "System\\ConfigController@set", 'as' => 'm.system.config.set']);
             Route::post('/set', ['uses' => "System\\ConfigController@setPost", 'as' => 'm.system.config.set.post']);
+            Route::post('/clearCache', ['uses' => "System\\ConfigController@clearCache", 'as' => 'm.system.config.clearCache']);
         });
 
         //标签
