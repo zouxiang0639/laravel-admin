@@ -43,7 +43,9 @@ if (!function_exists('get_file_img')) {
      */
     function get_file_img($path)
     {
-
+        if (stripos($path, "http") !== false) {
+            return $path;
+        }
         switch (config("upload.upload_drive")) {
             case 'local' :  //本地上传
                 return \Storage::disk('admin')->url($path);
