@@ -6,7 +6,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="{{ uploads_path(Admin::user()->avatar) }}" class="img-circle" alt="User Image">
+                <img src="{{ get_file_img(Admin::user()->avatar) }}" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p>{{ Admin::user()->name }}</p>

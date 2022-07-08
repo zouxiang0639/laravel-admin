@@ -38,7 +38,7 @@ class AdvertController extends Controller
 
         $list->getCollection()->each(function($item) {
             $item->typeName = AdvertTypeConst::getDesc($item->type);
-            $item->picture = uploads_path($item->picture);
+            $item->picture = get_file_img($item->picture);
         });
 
         return View::make('admin::other.advert.index',[
