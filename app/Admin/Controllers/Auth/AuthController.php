@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers\Auth;
 
 use App\Admin\Bls\Auth\Requests\settingRequest;
+use App\Admin\Bls\System\SystemOperationLogBls;
 use App\Exceptions\LogicException;
 use App\Library\Admin\Form\FormBuilder;
 use App\Library\Admin\Form\HtmlFormTpl;
@@ -171,6 +172,7 @@ class AuthController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
+        SystemOperationLogBls::store(0, '后台', '用户登录');
         admin_toastr('登录成功');
         $request->session()->regenerate();
 

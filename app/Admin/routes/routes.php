@@ -3,7 +3,7 @@
 Route::group([
     'prefix' => 'admin',
     'namespace' => 'App\\Admin\\Controllers',
-    'middleware' => ['web', 'admin'],
+    'middleware' => ['web', 'admin','systemLog'],
 ], function(){
 
     Route::get('/', ['uses' => "HomeController@index", 'as' => 'm.home']);
@@ -85,7 +85,8 @@ Route::group([
 
         //上传文件
         Route::group(['prefix'=>'upload'], function(){
-            Route::put('image', ['uses' => "System\\UploadController@image", 'as' => 'm.system.upload.image']);
+            Route::post('image', ['uses' => "System\\UploadController@image", 'as' => 'm.system.upload.image']);
+            Route::get('show', ['uses' => "System\\UploadController@show", 'as' => 'm.system.upload.show']);
             Route::put('ckeditor', ['uses' => "System\\UploadController@ckeditor", 'as' => 'm.system.upload.ckeditor']);
         });
 
@@ -99,6 +100,7 @@ Route::group([
             Route::delete('destroy/{id}', ['uses' => "System\\ConfigController@destroy", 'as' => 'm.system.config.destroy']);
             Route::get('/set', ['uses' => "System\\ConfigController@set", 'as' => 'm.system.config.set']);
             Route::post('/set', ['uses' => "System\\ConfigController@setPost", 'as' => 'm.system.config.set.post']);
+            Route::post('/clearCache', ['uses' => "System\\ConfigController@clearCache", 'as' => 'm.system.config.clearCache']);
         });
 
         //标签
@@ -116,6 +118,11 @@ Route::group([
         //系统日志
         Route::group(['prefix'=>'log', 'middleware' => 'admin.auth:m_system_log'], function(){
             Route::get('', ['uses' => "System\\LogController@index", 'as' => 'm.system.log.list']);
+        });
+
+        //系统日志
+        Route::group(['prefix'=>'operation', 'middleware' => 'admin.auth:m_system_operation_log'], function(){
+            Route::get('log', ['uses' => "System\\OperationLogController@index", 'as' => 'm.system.operation.log.list']);
         });
 
         //数据空备份

@@ -8,6 +8,7 @@ use Admin;
 use App\Library\Admin\Form\FormBuilder;
 use App\Library\Admin\Form\HtmlFormTpl;
 use App\Library\Admin\Widgets\Forms;
+use App\Library\Format\FormatData;
 use App\Library\Response\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -55,6 +56,11 @@ class WidgetsController extends Controller
                 $h->set('icon', true);
             });
 
+            $item->create('textarea', function(HtmlFormTpl $h, FormBuilder $form) {
+                $h->input = $form->textarea('textarea','', $h->options);
+                $h->set('textarea', true);
+            });
+
             $item->create('currency', function(HtmlFormTpl $h, FormBuilder $form) {
                 $h->input = $form->currency('currency', '', $h->options);
                 $h->set('currency', true);
@@ -84,6 +90,24 @@ class WidgetsController extends Controller
                 $h->input = $form->imageOne('imageOne', 'user2-160x160.jpg', $h->options);
                 $h->set('imageOne', true);
             });
+            $item->create('multiImage', function(HtmlFormTpl $h, FormBuilder $form) {
+                $data = [[
+                        "img" => "image/202207/04/0edf433fd656087663b75a1792b5d8b6.jpg",
+                        "aaa" => "sdfa",
+                        "aaa2" => "sdfsd"
+                      ], [
+                        "img" => "image/202207/04/64c1bbef8d931df7cf7eb1056fc65544.png",
+                        "aaa" => "sdf",
+                        "aaa2" => "sdfsdaS"
+                      ]];
+
+                $extend = [
+                    ["name" => "aaa", "title" => "张","attribute"=>"textarea"],
+                    ["name" => "aaa2", "title" => "张2","attribute"=>"textarea"]
+                ];
+                $h->input = $form->multiImage('multiImage',$data, $extend, $h->options);
+                $h->set('multiImage', true);
+            });
 
             $item->create('ckeditor', function(HtmlFormTpl $h, FormBuilder $form) {
                 $h->input = $form->ckeditor('ckeditor', 'adsdas');
@@ -102,8 +126,11 @@ class WidgetsController extends Controller
         ]);
     }
 
-    public function formPost(\Request $request)
+    public function formPost(Request $request)
     {
+        $a = FormatData::columnToRow($request->multiImage, ['img','aaa','aaa2']);
+        dd($a);
+
         return (new JsonResponse())->success('http://laravel-admin.org//uploads/images/下載 (4).jpg');
     }
 

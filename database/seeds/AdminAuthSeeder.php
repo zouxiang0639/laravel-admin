@@ -194,10 +194,20 @@ class AdminAuthSeeder extends Seeder
 
         $menuRequest->merge([
             'parent_id' => $menu->getKey(),
-            'title' => '系统日志',
+            'title' => '系统错误日志',
             'icon' => 'fa-database',
             'route' => 'm.system.log.list',
             'slug' => 'm_system_log',
+            'permissions' => WhetherConst::YES
+        ]);
+        MenuBls::storeMenu($menuRequest);
+
+        $menuRequest->merge([
+            'parent_id' => $menu->getKey(),
+            'title' => '系统操作日志',
+            'icon' => 'fa-database',
+            'route' => 'm.system.operation.log.list',
+            'slug' => 'm_system_operation_log',
             'permissions' => WhetherConst::YES
         ]);
         MenuBls::storeMenu($menuRequest);

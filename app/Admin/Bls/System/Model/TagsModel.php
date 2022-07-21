@@ -2,6 +2,7 @@
 
 namespace App\Admin\Bls\System\Model;
 
+use App\Admin\Bls\Auth\Model\AdministratorModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -22,5 +23,14 @@ class TagsModel extends Model
     protected $table = 'admin_tags';
 
     protected $dates = ['deleted_at'];
+
+
+    /**
+     * 操作人
+     */
+    public function oneParent()
+    {
+        return $this->belongsTo(TagsModel::class, 'parent_id');
+    }
 
 }

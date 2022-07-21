@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
         if(config('admin.config')) {
             ConfigBls::load();
         }
+
+        $this->bootLogger();
     }
 
     /**
@@ -29,5 +31,15 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    private function bootLogger()
+    {
+
+        app("log")->getMonolog()->pushProcessor(function($record){
+            $url = \Request::fullUrl();
+            $record["message"] =  " ($url)" . $record["message"];
+            return $record;
+        });
     }
 }

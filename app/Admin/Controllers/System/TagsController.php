@@ -33,11 +33,19 @@ class TagsController extends Controller
         if(empty($request->type)) {
             $request->merge(['type' => TagsTypeConst::TAG]);
         }
+        $parent = [];
+
+        $type = TagsTypeConst::getParent($request->type);
+        if($type){
+            $parent = TagsBls::getTagsByType($type)->pluck('tag_name','id')->toArray();
+        }
 
         $list = TagsBls::getTagsList($request);
 
         return View::make('admin::system.tags.index',[
             'list' => $list,
+            'parent' => $parent,
+            'type' => $type,
             'tagsType' => TagsTypeConst::desc()
         ]);
     }
@@ -54,12 +62,15 @@ class TagsController extends Controller
 
         $this->isEmpty($typeName);
 
+        $parentType = TagsTypeConst::getParent($request->type);
+
+
         $info = [
             'typeName' => $typeName,
             'type' => $request->type
         ];
         return View::make('admin::system.tags.create',[
-            'form' =>  $this->form($info),
+            'form' =>  $this->form($info,$parentType),
         ]);
     }
 
@@ -90,9 +101,9 @@ class TagsController extends Controller
 
         $this->isEmpty($model);
         $model->typeName = TagsTypeConst::getDesc($model->type);
-
+        $parentType = TagsTypeConst::getParent($model->type);
         return View::make('admin::system.tags.edit',[
-            'form' =>  $this->form($model),
+            'form' =>  $this->form($model,$parentType),
             'info' =>  $model
         ]);
     }
@@ -184,19 +195,30 @@ class TagsController extends Controller
      * @param $info
      * @return mixed
      */
-    protected function form($info)
+    protected function form($info,$parentType)
     {
-        return Admin::form(function(Forms $item) use ($info) {
+        return Admin::form(function(Forms $item) use ($info,$parentType) {
 
             $item->create('标签类型', function(HtmlFormTpl $h, FormBuilder $form) use ($info){
                 $h->input = $form->display(array_get($info, 'typeName')). $form->hidden('type', array_get($info, 'type'));
                 $h->set('type', true);
             });
 
+            if($parentType) {
+                $item->create('父级', function(HtmlFormTpl $h, FormBuilder $form) use ($info,$parentType){
+
+                    $parent = TagsBls::getTagsByType($parentType)->pluck('tag_name','id');
+                    $h->input = $form->select2('parent_id',$parent,array_get($info, 'parent_id'),['style'=>"width:100%"]);
+                    $h->set('parent_id', true);
+                });
+            }
+
+
             $item->create('标签名称', function(HtmlFormTpl $h, FormBuilder $form) use ($info){
                 $h->input = $form->text('tag_name', array_get($info, 'tag_name'), $h->options);
                 $h->set('tag_name', true);
             });
+
 
             $item->create('热度', function(HtmlFormTpl $h, FormBuilder $form) use ($info){
                 $h->input = $form->text('hot', array_get($info, 'hot'), $h->options);

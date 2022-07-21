@@ -31,7 +31,7 @@
     </div>
 
     @include('admin::partials.footer')
-
+    {!! Admin::style()->getHtml() !!}
 </div>
 
 

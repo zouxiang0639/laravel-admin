@@ -40,7 +40,10 @@ class FormBuilder extends \Collective\Html\FormBuilder
 
         //颜色
         'bootstrap-colorpicker.min.css' =>'/lib/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.css',
-        'bootstrap-colorpicker.min.js' =>'/lib/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js'
+        'bootstrap-colorpicker.min.js' =>'/lib/AdminLTE/plugins/colorpicker/bootstrap-colorpicker.min.js',
+
+        //layer
+        'layer.js' =>'/lib/layer-alert/layer.js'
     ];
 
     /**
@@ -134,12 +137,14 @@ EOT;
         Admin::style()->setCss(StyleTypeConst::FILE, $this->getResource('select2.min.css'));
         Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('select2.full.min.js'));
 
+        $placeholder = isset($selectAttributes['placeholder']) ? $selectAttributes['placeholder'] : '请选择';
         $code = <<<EOT
 
             $("select[name='$name']").select2({
                 allowClear: true,
                 placeholder: "$name",
-                separator:true
+                separator:true,
+                placeholder : "$placeholder",
             });\n
 EOT;
         Admin::style()->setJs(StyleTypeConst::CODE, $code);
@@ -324,52 +329,190 @@ EOT;
      */
     public function imageOne($name, $value = null, $options = [])
     {
-        $path = $value ? uploads_path($value) : $value;
-        $options['data-initial-preview'] = $path;
-        $options['data-initial-caption'] = $value;
-        Admin::style()->setCss(StyleTypeConst::FILE, $this->getResource('fileinput.min.css'));
-        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('fileinput.min.js'));
-        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('canvas-to-blob.min.js'));
-
-        $route = route('m.system.upload.image');
+        $path = $value ? get_file_img($value) : $value;
+        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('layer.js'));
+        $route = get_file_img('');
+        $content = route('m.system.upload.show', ['ext' => '','size'=>'300mb']);
+        $style = $value ? '' :  'display: none';
         $code = <<<EOT
 
-            $("input[name=$name]").fileinput({
-                "showRemove": false,
-                theme: "explorer",
-                uploadUrl: "$route",
-                "browseLabel": "浏览",
-                minFileCount: 1,
-                maxFileCount: 2,
-                overwriteInitial: false,
-                showUpload: false,
-                initialPreviewAsData: true,
-                allowedFileExtensions: ['jpg', 'png', 'gif'],
-                msgInvalidFileExtension: '文件 "{name}". 扩展名无效, 只支持 "{extensions}" 扩展名',
-                uploadExtraData: {
-                    "_token": $('meta[name="csrf-token"]').attr('content'),
-                    "_method": "PUT",
-                    "name": "$name"
-                },
-                preferIconicPreview: true
-            }).on("filebatchselected", function(event, files) {
-                if(files['length'] > 0) {
-                    $(this).fileinput("upload");
+            $('#$name').click(function(){
+            layer.open({
+              type: 2,
+              title: '上传文件',
+              maxmin: true,
+              area: ['500px', '450px'],
+              content: '$content',
+              btn:['保存', '关闭'],
+              yes:function(index, layero) {
+                var file = $(layero).find("iframe")[0].contentWindow.getFile();
+                if(file) {
+                  $('input[name=$name]').val(file.path);
+                  $('#mig_$name').find('img').attr("src",'$route'+file.path).show();
+                  $('#mig_$name').find('a').attr("href",'$route'+file.path);
+                  layer.close(index);
+                } else {
+                  swal('请上传图片', '', 'error');
                 }
-            }).on("fileuploaded", function(event, data) {
-                if(data.response) {
-                    $(this).fileinput("reset");
-                    $(this).fileinput("cancel");
 
-                    $('.kv-upload-progress').hide();
-                    $('.$name .file-preview-image').attr('src',data.response.data.url);
-                    $(".$name").find('input[name=$name]').val(data.response.data.filePath)
-                }
-            });\n
+              }
+            });
+          });\n
 EOT;
         Admin::style()->setJs(StyleTypeConst::CODE, $code);
 
-        return self::hidden($name, $value).self::file($name, $options);
+        $html = <<<EOT
+            <span id="mig_$name" >
+            <a target="_blank" href="$path">
+                <img src="$path" width="300" height="173" style="float:left; $style" >
+            </a>
+			</span>
+            <a style="margin-left: 10px" id="$name" href="javascript:;" class="btn btn-default btn-xs">上传图片</a>\n
+EOT;
+
+        return self::hidden($name, $value).$html;
+    }
+
+    public function multiImage($name, $value = [], $extend = [], $options = []) {
+        Admin::style()->setJs(StyleTypeConst::FILE, $this->getResource('layer.js'));
+        $route = get_file_img('');
+        $content = route('m.system.upload.show', ['ext' => '','size'=>'300mb']);
+
+        $isAdd =  $value ? true : false;
+        $code = <<<EOT
+                    function {$name}DeleteDetails(obj) {
+                            $(obj).parent().parent().remove();
+                        }
+
+                        /**
+                         * 添加发票明细
+                         */
+                        function {$name}AddDetails (boole) {
+                            if (boole != true) {
+                                $('#{$name}_contents').append($("#{$name}_contents_clone .{$name}_clone").clone());
+                            }
+
+                        }
+
+                        function {$name}MultiImageUpload (obj) {
+
+                            layer.open({
+                                type: 2,
+                                title: '上传文件',
+                                maxmin: true,
+                                area: ['500px', '450px'],
+                                content: '$content',
+                                btn:['保存', '关闭'],
+                                yes:function(index, layero) {
+                                    var file = $(layero).find("iframe")[0].contentWindow.getFile();
+                                    if(file) {
+                                        $(obj).next().val(file.path);
+                                        $(obj).prev().find('img').attr("src",'$route'+file.path).show();
+                                        $(obj).prev().find('a').attr("href",'$route'+file.path);
+                                        layer.close(index);
+                                    } else {
+                                        swal('请上传图片', '', 'error');
+                                    }
+
+                                }
+                            });
+                        }
+
+                        $(function() {
+                            {$name}AddDetails({$isAdd})
+                        })
+\n
+EOT;
+
+        Admin::style()->setJs(StyleTypeConst::JS_CODE_FUNCTION, $code);
+        $thead = '';
+        $tbody = '';
+
+        foreach ($extend as $item) {
+            $thead .= "<th>{$item['title']}</th>";
+
+            $extendFrom = call_user_func_array(
+                [$this, $item["attribute"]],
+                [$name."[{$item['name']}][]",'', $options]
+            );
+
+            $tbody .= "<td>$extendFrom</td>";
+        }
+
+        $html = <<<EOT
+                       <table>
+                            <tfoot id="{$name}_contents_clone" style="display: none">
+                            <tr class="{$name}_clone">
+                                <td>
+                                    <span class="mig_multiImage" >
+                                    <a target="_blank" class="multiImage_a" href="">
+                                        <img class="multiImage_img" src="" max-width="300" max-height="173" style="float:left; display: none;"  >
+                                    </a>
+                                    </span>
+                                    <a style="margin-left: 10px" onclick="{$name}MultiImageUpload(this)" href="javascript:;" class="btn btn-default btn-xs">上传图片</a>
+                                    <input name="multiImage[img][]" class="multiImage_input" type="hidden" value="">
+                                </td>
+                                {$tbody}
+                                <td style="text-align: center;">
+                                    <button type="button" onclick="{$name}DeleteDetails(this) " class="btn btn-default btn-xs">-</button>
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+EOT;
+        Admin::style()->setJs(StyleTypeConst::HTML, $html);
+
+        $valueHtml = '';
+        foreach ($value as $item) {
+            $valueTbody = '';
+            foreach ($extend as $n) {
+
+                $extendFrom = call_user_func_array(
+                    [$this, $n["attribute"]],
+                    [$name."[{$n['name']}][]",$item[$n['name']], $options]
+                );
+                $valueTbody .= "<td>$extendFrom</td>";
+            }
+
+            $style = $item['img'] ? '' :  'display: none';
+            $path = $value ? get_file_img($item['img']) : $value;
+            $valueHtml .= <<<EOT
+                <tr class="{$name}_clone">
+                    <td>
+                        <span class="mig_multiImage" >
+                        <a target="_blank" class="multiImage_a" href="{$path}">
+                            <img class="multiImage_img" src="{$path}" max-width="300" max-height="173" style="float:left; $style" >
+                        </a>
+                        </span>
+                        <a style="margin-left: 10px" onclick="{$name}MultiImageUpload(this)" href="javascript:;" class="btn btn-default btn-xs">上传图片</a>
+                        <input name="{$name}[img][]" type="hidden" value="{$item['img']}">
+                    </td>
+                    {$valueTbody}
+                    <td style="text-align: center;">
+                        <button type="button" onclick="{$name}DeleteDetails(this) " class="btn btn-default btn-xs">-</button>
+                    </td>
+                </tr>
+EOT;
+
+        }
+        $data = <<<EOT
+                        <button type="button" onclick="{$name}AddDetails()" class="btn btn-default" >添加</button>
+                        <table class="table table-bordered">
+                          <thead>
+                                <tr>
+                                    <th>上传图片</th>
+                                    {$thead}
+                                    <th>删除</th>
+                                </tr>
+                            </thead>
+                            <tbody id="{$name}_contents">
+                            {$valueHtml}
+                            </tbody >
+                        </table>
+
+                     
+EOT;
+        return $data;
     }
 
     /**
@@ -438,7 +581,7 @@ EOT;
 EOT;
 
         Admin::style()->setJs(StyleTypeConst::CODE, $code);
-        return self::textarea($name, $value = null, $options = []);
+        return self::textarea($name, $value, $options = []);
     }
 
     /**
