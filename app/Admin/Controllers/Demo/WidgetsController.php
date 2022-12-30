@@ -11,7 +11,14 @@ use App\Library\Admin\Widgets\Forms;
 use App\Library\Format\FormatData;
 use App\Library\Response\JsonResponse;
 use Illuminate\Http\Request;
+use Swagger\Annotations\Info;
 
+/**
+ * @info(
+ *     title = "My demo",
+ *     version = "v1.0.0.1"
+ * )
+ */
 class WidgetsController extends Controller
 {
     public function form()
@@ -126,12 +133,55 @@ class WidgetsController extends Controller
         ]);
     }
 
+
+
     public function formPost(Request $request)
     {
         $a = FormatData::columnToRow($request->multiImage, ['img','aaa','aaa2']);
         dd($a);
 
         return (new JsonResponse())->success('http://laravel-admin.org//uploads/images/下載 (4).jpg');
+    }
+
+    /**
+     * @SWG\Get(
+     *     path="/admin/demo/getSwagger",
+     *     description="返回测试内容",
+     *     operationId="api.dashboard.index",
+     *     produces={"application/json"},
+     *     tags={"测试"},
+     *     @SWG\Parameter(
+     *         in="formData",
+     *         name="reason",
+     *         type="string",
+     *         description="拿数据的理由",
+     *         required=true,
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Dashboard overview."
+     *     ),
+     *     @SWG\Response(
+     *         response=401,
+     *         description="Unauthorized action.",
+     *     )
+     * )
+     */
+    public function getSwagger(Request $request)
+    {
+        return response()->json([
+            'result'    => [
+                'statistics' => [
+                    'users' => [
+                        'name'  => 'Name',
+                        'email' => 'user@example.com'
+                    ]
+                ],
+            ],
+            'message'   => '',
+            'type'      => 'success',
+            'status'    => 0
+        ]);
     }
 
     public function selectSearch(Request $request)

@@ -149,6 +149,7 @@ Route::group([
         Route::get('form', ['uses' => "Demo\\WidgetsController@form", 'as' => 'm.demo.form']);
         Route::post('formPost', ['uses' => "Demo\\WidgetsController@formPost", 'as' => 'm.demo.widgets.formPost']);
         Route::post('select/search', ['uses' => "Demo\\WidgetsController@selectSearch", 'as' => 'm.demo.widgets.select.search']);
+        Route::get('getSwagger', ['uses' => "Demo\\WidgetsController@getSwagger", 'as' => 'm.demo.widgets.getSwagger']);
     });
 
 
