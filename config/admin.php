@@ -36,7 +36,7 @@ return [
     'config' => env('ADMIN_CONFIG', false),
 
     //登录的背景图片
-    'login_background_image' => '/admin/img/login_background.jpg',
+    'login_background_image' => 'login_background.jpg',
 
     /*
      * Laravel-admin auth setting.
